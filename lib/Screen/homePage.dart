@@ -11,6 +11,7 @@ import 'package:bookplayapp/Services/api_services/apiConstants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Model/groundListResponse.dart';
@@ -86,6 +87,15 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     Icons.search,size: 25,
                     color: Colors.black,
                   ),
+suffixIcon: IconButton(
+icon: Icon(Icons.calendar_month_sharp,color: Colors.black,)
+,onPressed: () {
+setState(() {
+
+});
+  _showMyDialog();
+
+},),
                   focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(color: Colors.white, width: 1)),
@@ -645,5 +655,356 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
      });
     }
+  }
+
+
+
+  Future <void> searchbytimeslot () async{
+
+
+
+    var param = {
+      'category_id': "${timeslotSectcat.toString()}",
+      'date': "${datecontroller.text.toString()}",
+      'time': '${timeController.text.toString()}'
+    };
+
+    apiBaseHelper.postAPICall(SearchbytimeSlotAPI, param).then((getData) {
+      bool error = getData['status'];
+      String msg = getData['message'];
+
+      if (error) {
+
+
+
+        groundList = (getData['data'] as List).map((e) => GroundList.fromJson(e)).toList();
+        datecontroller.clear();
+        timeController.clear();
+      setState(() {
+
+      });
+Navigator.pop(context);
+
+
+      } else {
+        Navigator.pop(context);
+
+        Fluttertoast.showToast(msg: msg.toString());
+        groundList.clear();
+        setState(() {
+
+        });
+      }
+    });
+  }
+  final formKey = GlobalKey<FormState>();
+  var timeslotSectcat;
+
+  TextEditingController   datecontroller=TextEditingController();
+  TextEditingController   timeController=TextEditingController();
+  var selectCatIddd;
+  DateTime selectedDate = DateTime.now();
+  Future<void> sselectDate(BuildContext context) async {
+
+    final DateTime? picked = await showDatePicker(
+
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != selectedDate)
+
+      selectedDate = picked;
+    datecontroller.text=
+        DateFormat('yyyy-MM-dd').format(selectedDate);
+    print("==================${datecontroller.text}");
+
+
+   setState(() {
+
+   });
+  }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return
+        StatefulBuilder(builder: (context, setState) {
+
+          return
+
+            AlertDialog(
+
+                backgroundColor: Colors.white,
+                actions:[
+
+
+                  Form(
+                    key: formKey,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          SizedBox(height: 10,),
+                          Text('Search By Time Slot',style: TextStyle(fontWeight: FontWeight.bold),),
+                          SizedBox(height: 20,),
+                          catList.isEmpty
+                              ? SizedBox(
+                            height: 50,
+                            width: MediaQuery.of(context)
+                                .size
+                                .width,
+                            child: const Center(
+                              child: Text(
+                                  'Categories Not Available'),
+                            ),
+                          )
+                              : SingleChildScrollView(
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 50,
+                                  width: MediaQuery.of(
+                                      context)
+                                      .size
+                                      .width /
+                                      1.5,
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection:
+                                    Axis.horizontal,
+                                    physics:
+                                    const AlwaysScrollableScrollPhysics(),
+                                    itemCount: catList
+                                        .length ??
+                                        0,
+                                    itemBuilder:
+                                        (context, index) {
+                                      return InkWell(
+                                        onTap: () {
+
+                                          setState(() {
+                                            timeslotSectcat =
+                                                index;
+                                          });
+
+
+                                          selectCatIddd =
+                                              catList[
+                                              index]
+                                                  .id;
+
+                                        },
+                                        child: Card(
+                                          child:
+                                          Container(
+                                            decoration:
+                                            BoxDecoration(
+                                              color: timeslotSectcat ==
+                                                  index
+                                                  ?
+                                              Colors.blue
+                                                  : Colors
+                                                  .white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors
+                                                      .grey
+                                                      .withOpacity(0.5),
+                                                  blurRadius:
+                                                  10,
+                                                  spreadRadius:
+                                                  0,
+                                                ),
+                                              ],
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  5.0),
+                                            ),
+                                            height: 40,
+                                            width: 105,
+                                            child: Center(
+                                              child: Text(
+                                                '${catList[index].title}',
+                                                style: TextStyle(
+                                                    fontSize:
+                                                    13,
+                                                    color: timeslotSectcat == index
+                                                        ? Colors.white
+                                                        : Colors.black),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10)),
+                            elevation: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.all(3),
+                              child: TextFormField(
+                                onTap: () {
+                                  sselectDate(context);
+                                },
+                                readOnly: true,
+                                controller:
+                                datecontroller,
+                                decoration: InputDecoration(
+                                    hintText: " Select Date",
+                                    border: InputBorder.none,
+                                    contentPadding:
+                                    EdgeInsets.only(top: 15),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons
+                                            .calendar_month_sharp,
+                                        color: Colors.black,
+                                      ),
+                                    )),
+                                validator: (value) {
+                                  if (value == null ||
+                                      value.isEmpty) {
+                                    return ' Please Select Date';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.circular(10)),
+                            elevation: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.all(3),
+                              child: TextFormField(
+                                readOnly: true,
+                                onTap:() async {
+
+
+                                  TimeOfDay? picked = await selectTime(context);
+                                  if (picked != null) {
+                                    DateTime dateTime = DateTime(
+                                        2020, 10, 10, picked!.hour, picked!.minute);
+                                    setState(() {
+                                      timeController.text =
+                                      "${DateFormat("HH").format(dateTime)}:00";
+                                      print(timeController.text);
+                                    });
+                                  }
+                                },
+
+                                controller:
+                                timeController,
+                                decoration: InputDecoration(
+                                    counterText: "",
+                                    hintText: " Time",
+                                    border: InputBorder.none,
+                                    contentPadding:
+                                    EdgeInsets.only(top: 15),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(
+                                        Icons
+                                            .watch_later_outlined,
+                                        color: Colors.black,
+                                      ),
+                                    )),
+                                validator: (value) {
+                                  if (value == null ||
+                                      value.isEmpty) {
+                                    return ' Please Enter Time';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceEvenly,
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary:
+                                    Colors.blue),
+                                child: const Text("Back"),
+                                onPressed: () async {
+                                  Navigator.pop(context);
+                                },
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary:
+                                    Colors.blue),
+                                child: const Text("Search"),
+                                onPressed: () {
+                                  if (formKey.currentState!
+                                      .validate()) {
+                                    if (
+                                    selectCatIddd ==
+                                        null) {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                          "Select Category");
+                                    } else {
+
+
+                                      searchbytimeslot();
+                                    }
+                                  }
+                                },
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ]
+            );
+
+        },);
+
+
+
+
+
+      },
+    );
+  }
+  Future<TimeOfDay?> selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+        builder: (BuildContext? context, Widget? child) {
+          return MediaQuery(
+            data: MediaQuery.of(context!).copyWith(alwaysUse24HourFormat: true),
+            child: child!,
+          );
+        });
+
+    return picked;
   }
 }

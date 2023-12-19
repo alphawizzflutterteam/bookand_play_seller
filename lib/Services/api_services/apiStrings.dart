@@ -43,6 +43,7 @@ final Uri supportAPI = Uri.parse('${baseUrl}policies?slug=support_us');
 final Uri getTermsAPI = Uri.parse('${baseUrl}policies?slug=terms_and_condition');
 final Uri getFAQApi = Uri.parse('${baseUrl}faqs');
 final Uri getCancleBookingOfflineApi = Uri.parse('${baseUrl}cancel_offline_booking');
+final Uri SearchbytimeSlotAPI = Uri.parse('${baseUrl}search_by_slot_availability');
 
 
 

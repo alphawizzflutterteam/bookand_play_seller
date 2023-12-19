@@ -136,7 +136,7 @@ class _OfflineBookingState extends State<OfflineBooking> {
                                                     value:
 
 
-                                                    '${OfflineBooking?.data[index].createdAt.day}-${OfflineBooking?.data[index].createdAt.month}-${OfflineBooking?.data[index].createdAt.year}'),
+                                                    '${OfflineBooking?.data[index].bookingDate.day}-${OfflineBooking?.data[index].bookingDate.month}-${OfflineBooking?.data[index].bookingDate.year}'),
 
                                                 helper(
                                                     key: 'Time',
@@ -168,7 +168,7 @@ color: colors.red,
 
                                                       color: colors.secondary,
                                                     ),
-                                                    child: Center(child: Text('Click To cancle booking'),),
+                                                    child: Center(child: Text('Click To cancel booking'),),
                                                   ),
                                                 )
                                               ],
