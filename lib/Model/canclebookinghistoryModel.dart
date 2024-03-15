@@ -34,6 +34,7 @@ class Datum {
   dynamic comment;
   DateTime createdAt;
   DateTime updatedAt;
+  String? imggGround;
 
   Datum({
     required this.id,
@@ -46,6 +47,7 @@ class Datum {
     required this.comment,
     required this.createdAt,
     required this.updatedAt,
+    required this.imggGround,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -59,6 +61,8 @@ class Datum {
     comment: json["comment"],
     createdAt: DateTime.parse(json["created_at"]),
     updatedAt: DateTime.parse(json["updated_at"]),
+    imggGround: json["groundimage"],
+
   );
 
   Map<String, dynamic> toJson() => {
@@ -72,5 +76,7 @@ class Datum {
     "comment": comment,
     "created_at": createdAt.toIso8601String(),
     "updated_at": updatedAt.toIso8601String(),
+    "groundimage": imggGround,
+
   };
 }

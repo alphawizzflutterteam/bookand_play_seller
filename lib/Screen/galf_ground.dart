@@ -22,10 +22,11 @@ import 'bookingForm.dart';
 import 'bottomScreen.dart';
 import 'edit_ground_form.dart';
 import 'package:http/http.dart' as http;
+
 class GolfGroungScreen extends StatefulWidget {
   const GolfGroungScreen({super.key, this.groundId});
 
-  final String? groundId ;
+  final String? groundId;
 
   @override
   State<GolfGroungScreen> createState() => _GolfGroungScreenState();
@@ -42,16 +43,17 @@ class _GolfGroungScreenState extends State<GolfGroungScreen> {
     groundDetails();
     getSlot();
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Stack(
         children: [
-          CommonBgWidget(),
+          const CommonBgWidget(),
           Scaffold(
               backgroundColor: Colors.transparent,
               appBar: PreferredSize(
-                  preferredSize: Size.fromHeight(80),
+                  preferredSize: const Size.fromHeight(80),
                   child: commonAppBar(context,
                       text: "Golf Ground", isActionButton: false)),
               body: bodyWidget()),
@@ -61,15 +63,16 @@ class _GolfGroungScreenState extends State<GolfGroungScreen> {
   }
 
   List list = [1, 2, 3];
-List getbanner=[];
-  bool isGroundLoading = false ;
+  List getbanner = [];
+  bool isGroundLoading = false;
+
   GroundDetailResponse? groundDetailResponse;
 
   Widget bodyWidget() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      margin: EdgeInsets.only(top: 35),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.only(top: 35),
       decoration: const BoxDecoration(
         color: colors.white10,
         borderRadius: BorderRadius.only(
@@ -83,81 +86,72 @@ List getbanner=[];
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-            groundDetailResponse==null?Container(height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-
-              child: Center(child: CircularProgressIndicator(),),
-
-            ):
-
-
-
-
-                CarouselSlider(
-
-
-                  items: getbanner
-                      .map(
-                        (item) =>
-
-                            Stack(
-
-                          children:[ ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                      item.toString(),
-                                    ),
-                                    fit: BoxFit.fill)),
-                          )),
+            groundDetailResponse == null
+                ? Container(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : CarouselSlider(
+                    items: getbanner
+                        .map(
+                          (item) => Stack(children: [
+                            ClipRRect(
+                                borderRadius: BorderRadius.circular(15),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                          image: NetworkImage(
+                                            item.toString(),
+                                          ),
+                                          fit: BoxFit.fill)),
+                                )),
                             Positioned(
                               top: 10,
-                              left: MediaQuery.of(context).size.width/1.25,
-                              child:
-    groundDetailResponse!.data!.bannerImage!.isEmpty?  SizedBox():
-
-                              IconButton(onPressed: () {
-deleatebanner(groundDetailResponse!.data!.bannerImage![selected].imageId.toString());
-setState(() {
-
-});
-                              }, icon: Icon(Icons.delete,color: colors.secondary,)),
+                              left: MediaQuery.of(context).size.width / 1.25,
+                              child: groundDetailResponse!
+                                      .data!.bannerImage!.isEmpty
+                                  ? const SizedBox()
+                                  : IconButton(
+                                      onPressed: () {
+                                        deleatebanner(groundDetailResponse!
+                                            .data!
+                                            .bannerImage![selected]
+                                            .imageId
+                                            .toString());
+                                        setState(() {});
+                                      },
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: colors.secondary,
+                                      )),
                             ),
-    ]
-                        ),
-                  )
-                      .toList(),
-                  carouselController: controller,
-                  options: CarouselOptions(
-                      scrollPhysics: const BouncingScrollPhysics(),
-                      autoPlay: true,
-                      aspectRatio: 1.8,
-                      viewportFraction: 1,
-
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          selected = index;
-
-
-                        });
-                      })
-    ),
-
-
-
-            SizedBox(
+                          ]),
+                        )
+                        .toList(),
+                    carouselController: controller,
+                    options: CarouselOptions(
+                        scrollPhysics: const BouncingScrollPhysics(),
+                        autoPlay: true,
+                        aspectRatio: 1.8,
+                        viewportFraction: 1,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            selected = index;
+                          });
+                        })),
+            const SizedBox(
               height: 10,
             ),
             sliderPointers(getbanner, selected),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   backgroundColor: colors.secondary,
                   radius: 10,
                   child: Icon(
@@ -166,116 +160,131 @@ setState(() {
                     size: 12,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 SizedBox(
-
-                  width: MediaQuery.of(context).size.width/1.3,
+                  width: MediaQuery.of(context).size.width / 1.3,
                   child: Text(
                     '${groundDetailResponse?.data?.address}',
-                    style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               'Timing',
-              style: TextStyle(fontSize: 16,fontWeight:FontWeight.bold),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Card(
               child: Container(
                 color: Colors.white,
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 child: Column(
                   children: [
                     helper(
                         value1: 'Opening Time and Closing Time',
-                        value2: '${groundDetailResponse?.data?.openingTime} TO ${groundDetailResponse?.data?.closingTime}'),
-                    SizedBox(
+                        value2:
+                            '${groundDetailResponse?.data?.openingTime} TO ${groundDetailResponse?.data?.closingTime}'),
+                    const SizedBox(
                       height: 10,
                     ),
-                    helper(value1: 'Holiday', value2:'${groundDetailResponse?.data?.holiday}'),
+                    helper(
+                        value1: 'Holiday',
+                        value2: '${groundDetailResponse?.data?.holiday ?? ""}'),
                   ],
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               'Facilities',
-              style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
-            groundDetailResponse?.data?.facility==[]?Container(
-              height: 50,
-              child: Center(child: Text('Facility Not Avaiable'),),):
-            Row(
-              children:List<Widget>.generate( groundDetailResponse?.data?.facility?.length ?? 0, (index) => Card(
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: colors.secondary,
-                        radius: 10,
-                        child: Icon(
-                          Icons.pin_drop_rounded,
-                          color: Colors.white,
-                          size: 12,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        '${groundDetailResponse?.data?.facility?[index]}',
-                        style: TextStyle(fontSize: 10,fontWeight: FontWeight.bold),
-                      ),
-                    ],
+            groundDetailResponse?.data?.facility == []
+                ? Container(
+                    height: 50,
+                    child: const Center(
+                      child: Text('Facility Not Avaiable'),
+                    ),
+                  )
+                : Row(
+                    children: List<Widget>.generate(
+                        groundDetailResponse?.data?.facility?.length ?? 0,
+                        (index) => Card(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 5),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    const CircleAvatar(
+                                      backgroundColor: colors.secondary,
+                                      radius: 10,
+                                      child: Icon(
+                                        Icons.pin_drop_rounded,
+                                        color: Colors.white,
+                                        size: 12,
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 4,
+                                    ),
+                                    Text(
+                                      '${groundDetailResponse?.data?.facility?[index]}',
+                                      style: const TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )),
                   ),
-                ),
-              )) ,
-
-            ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               'Description',
-              style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            SizedBox(
+            const SizedBox(
               height: 5,
             ),
             Card(
               child: Container(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Ground',
-                      style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       '${groundDetailResponse?.data?.title}',
-                      style: TextStyle(fontSize: 13, color: colors.secondary),
+                      style: const TextStyle(
+                          fontSize: 13, color: colors.secondary),
                     ),
                     Container(
                       child: Text(
-                        "${groundDetailResponse?.data?.description}",style: TextStyle(
+                        "${groundDetailResponse?.data?.description}",
+                        style: const TextStyle(
                           fontSize: 12,
                         ),
                       ),
@@ -284,13 +293,22 @@ setState(() {
                 ),
               ),
             ),
-
-            SizedBox(height: 20,),
-
+            const SizedBox(
+              height: 20,
+            ),
+            Text(
+              "Time Slots",
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            groundDetailResponse?.data?.groundTimeSlotes?.isEmpty ?? false ?SizedBox() :  Wrap(
+              spacing: 8.0, // gap between adjacent chips
+              runSpacing: 4.0, // gap between lines
+              children: <Widget>[...generate_tags()],
+            ),
             Row(
               children: [
                 Text(
-                  "Time Slot",
+                  "Offer Slots",
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ],
@@ -298,425 +316,407 @@ setState(() {
             const SizedBox(
               height: 5,
             ),
-            getslotList.isEmpty?
-
-                Container(
-
-                  height: 60,
-
-                  child: Center(child: Text('Time Slot Not Available Please Add Time Slot'),),
-                ):
-           ListView.builder(
-             shrinkWrap: true,
-
-             itemCount:
-             getslotList.length,
-               itemBuilder: (context, index) {
-               return  Container(
-
-                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(8),
-
-                 border: Border.all(color: Colors.black,width: 1)
-                 ),
-
-                 child:Padding(
-                   padding: const EdgeInsets.all(8.0),
-                   child: Column(children: [
-
-
-                     Row(children: [
-                       Text('Day'),
-                       Spacer(),
-                       Text('${getslotList[index].day}')
-
-                     ],),
-                     SizedBox(height: 2,),
-                     Row(children: [
-                       Text('Open Time'),
-                       Spacer(),
-                       Text('${getslotList[index].openingTime}')
-
-                     ],),
-                     SizedBox(height: 2,),
-                     Row(children: [
-                       Text('Close Time'),
-                       Spacer(),
-                       Text('${getslotList[index].closingTime}')
-
-                     ],),
-                     SizedBox(height: 2,),
-                     Row(children: [
-                       Text('Offer Price'),
-                       Spacer(),
-                       Text('${getslotList[index].offerPrice}')
-
-                     ],),
-
-                     SizedBox(height: 2,),
-                     Row(children: [
-                       Text(''),
-                       Spacer(),
-                      InkWell(
-                          onTap: () {
-
-
-                            deleteSlot("${getslotList[index].id}");
-                          },
-                          child
-
-                          : Icon(Icons.delete,color: Colors.red,size: 20,))
-
-                     ],),
-                   ]),
-                 ),
-
-               );
-
-
-               },
-
-
-
-           ),
-
-            SizedBox(height: 20,),
+            getslotList.isEmpty
+                ? Container(
+                    height: 60,
+                    child: const Center(
+                      child:
+                          Text('Time Slot Not Available Please Add Time Slot'),
+                    ),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: getslotList.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border:
+                                  Border.all(color: Colors.black, width: 1)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(children: [
+                              Row(
+                                children: [
+                                  const Text('Day'),
+                                  const Spacer(),
+                                  Text('${getslotList[index].day}')
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 2,
+                              ),
+                              Row(
+                                children: [
+                                  const Text('Open Time'),
+                                  const Spacer(),
+                                  Text('${getslotList[index].openingTime}')
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 2,
+                              ),
+                              Row(
+                                children: [
+                                  const Text('Close Time'),
+                                  const Spacer(),
+                                  Text('${getslotList[index].closingTime}')
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 2,
+                              ),
+                              Row(
+                                children: [
+                                  const Text('Offer Price'),
+                                  const Spacer(),
+                                  Text('${getslotList[index].offerPrice}')
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 2,
+                              ),
+                              Row(
+                                children: [
+                                  const Text(''),
+                                  const Spacer(),
+                                  InkWell(
+                                      onTap: () {
+                                        deleteOfferSlot("${getslotList[index].id}");
+                                      },
+                                      child: const Icon(
+                                        Icons.delete,
+                                        color: Colors.red,
+                                        size: 20,
+                                      ))
+                                ],
+                              ),
+                            ]),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+            const SizedBox(
+              height: 20,
+            ),
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => BookingForm(groundId: widget.groundId.toString()),));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          BookingForm(groundId: widget.groundId.toString()),
+                    ));
               },
-              child:
-
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                     color: colors.secondary,
                     borderRadius: BorderRadius.circular(40)),
-                child: Center(
+                child: const Center(
                   child: Text(
                     'Booking Now',
                     style: TextStyle(color: Colors.white, fontSize: 14),
                   ),
                 ),
               ),
-
-
             ),
-
-            SizedBox(height: 20,),
+            const SizedBox(
+              height: 20,
+            ),
             InkWell(
               onTap: () {
                 showOptions(context);
               },
-              child:
-
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                     color: colors.secondary,
                     borderRadius: BorderRadius.circular(40)),
-                child: Center(
+                child: const Center(
                   child: Text(
                     'Add Ground Image',
                     style: TextStyle(color: Colors.white, fontSize: 14),
                   ),
                 ),
               ),
-
-
             ),
-
-            SizedBox(height: 20,),
-
+            const SizedBox(
+              height: 20,
+            ),
             InkWell(
               onTap: () {
-setState(() {
-  isaddTimeslot=true;
-});
+                setState(() {
+                  isaddTimeslot = true;
+                });
               },
-              child:
-
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
                     color: colors.secondary,
                     borderRadius: BorderRadius.circular(40)),
-                child: Center(
+                child: const Center(
                   child: Text(
-                    'Add New Time Slot',
+                    'Add New Offer Time Slot',
                     style: TextStyle(color: Colors.white, fontSize: 14),
                   ),
                 ),
               ),
-
-
             ),
-
-            isaddTimeslot?
-
-            Form(
-
-              child: Column(children: [
-
-                SizedBox(height: 20,),
-
-
-                Row(
-                  children: [
-                    Text(
-                      "Select Days",
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: dayList.map((e) {
-                      return InkWell(
-                        onTap: () {
-                          setState(() {
-                            selectdays=e.toString();
-                            print('${selectdays}====${e.toString()}');
-                          });
-                        },
-                        child: Container(
-                          color: selectdays==e.toString()
-                              ? colors.btn
-                              : Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 7),
-                          margin: const EdgeInsets.only(right: 10),
-                          child: Text(
-                            e,
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelLarge!
-                                .copyWith(
-                                color:  selectdays==e.toString()
-                                    ? Colors.white
-                                    : Colors.black),
+            isaddTimeslot
+                ? Form(
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Select Days",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: dayList.map((e) {
+                              return InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    selectdays = e.toString();
+                                    print('${selectdays}====${e.toString()}');
+                                  });
+                                },
+                                child: Container(
+                                  color: selectdays == e.toString()
+                                      ? colors.btn
+                                      : Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 7),
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Text(
+                                    e,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge!
+                                        .copyWith(
+                                            color: selectdays == e.toString()
+                                                ? Colors.white
+                                                : Colors.black),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
                           ),
                         ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                SizedBox(height: 20,),
-
-                Row(
-                  children: [
-                    Text(
-                      "Open Time",
-                      style: Theme.of(context).textTheme.bodyLarge,
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Open Time",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          controller: openTimeCon,
+                          keyboardType: TextInputType.visiblePassword,
+                          readOnly: true,
+                          onTap: () async {
+                            TimeOfDay? picked = await selectTime(context);
+                            if (picked != null) {
+                              DateTime dateTime = DateTime(
+                                  2020, 10, 10, picked!.hour, picked!.minute);
+                              setState(() {
+                                openTimeCon.text =
+                                    "${DateFormat("HH").format(dateTime)}:00";
+                                print(openTimeCon.text);
+                              });
+                            }
+                          },
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            hintText: "_:_",
+                            fillColor: Colors.white,
+                            filled: true,
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Close Time",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          controller: closeTimeCon,
+                          keyboardType: TextInputType.visiblePassword,
+                          readOnly: true,
+                          onTap: () async {
+                            TimeOfDay? picked = await selectTime(context);
+                            if (picked != null) {
+                              DateTime dateTime = DateTime(
+                                  2020, 10, 10, picked!.hour, picked!.minute);
+                              setState(() {
+                                closeTimeCon.text =
+                                    "${DateFormat("HH").format(dateTime)}:00";
+                                print(closeTimeCon.text);
+                              });
+                            }
+                          },
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            hintText: "_:_",
+                            fillColor: Colors.white,
+                            filled: true,
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Price",
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          controller: priceCon,
+                          keyboardType: TextInputType.number,
+                          maxLength: 10,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          autofocus: true,
+                          textInputAction: TextInputAction.next,
+                          decoration: const InputDecoration(
+                            hintText: "Enter Price",
+                            fillColor: Colors.white,
+                            counterText: '',
+                            filled: true,
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white)),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            if (selectdays == null) {
+                              Fluttertoast.showToast(msg: 'Please Select Day');
+                            } else if (openTimeCon.text.isEmpty) {
+                              Fluttertoast.showToast(
+                                  msg: 'Please Select Open Time');
+                            } else if (closeTimeCon.text.isEmpty) {
+                              Fluttertoast.showToast(
+                                  msg: 'Please Select Close Time');
+                            } else if (priceCon.text.isEmpty) {
+                              Fluttertoast.showToast(msg: 'Please Enter Price');
+                            } else {
+                              addtimeSlot();
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            decoration: BoxDecoration(
+                                color: colors.secondary,
+                                borderRadius: BorderRadius.circular(40)),
+                            child: const Center(
+                              child: Text(
+                                'Add Time Slot',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                TextFormField(
-                  controller: openTimeCon,
-                  keyboardType: TextInputType.visiblePassword,
-                  readOnly: true,
-                  onTap: () async {
-                    TimeOfDay? picked = await selectTime(context);
-                    if (picked != null) {
-                      DateTime dateTime = DateTime(
-                          2020, 10, 10, picked!.hour, picked!.minute);
-                      setState(() {
-                        openTimeCon.text =
-                        "${DateFormat("HH").format(dateTime)}:00";
-                        print(openTimeCon.text);
-                      });
-                    }
-                  },
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    hintText: "_:_",
-                    fillColor: Colors.white,
-                    filled: true,
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Close Time",
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                TextFormField(
-                  controller: closeTimeCon,
-                  keyboardType: TextInputType.visiblePassword,
-                  readOnly: true,
-                  onTap: () async {
-                    TimeOfDay? picked = await selectTime(context);
-                    if (picked != null) {
-                      DateTime dateTime = DateTime(
-                          2020, 10, 10, picked!.hour, picked!.minute);
-                      setState(() {
-                        closeTimeCon.text =
-                        "${DateFormat("HH").format(dateTime)}:00";
-                        print(closeTimeCon.text);
-                      });
-                    }
-                  },
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    hintText: "_:_",
-                    fillColor: Colors.white,
-                    filled: true,
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                  ),
-                ),
-                SizedBox(height: 20,),
-                Row(
-                  children: [
-                    Text(
-                      "Price",
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                TextFormField(
-                  controller: priceCon,
-                  keyboardType: TextInputType.number,
-                  maxLength: 10,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  autofocus: true,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(
-                    hintText: "Enter Price",
-                    fillColor: Colors.white,
-                    counterText: '',
-                    filled: true,
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white)),
-                  ),
-                ),
-SizedBox(height: 20,),
-
-                InkWell(
-                  onTap: () {
-                  if(selectdays==null){
-
-                    Fluttertoast.showToast(msg: 'Please Select Day');
-                  }
-                  else
-                  if(openTimeCon.text.isEmpty){
-
-                    Fluttertoast.showToast(msg: 'Please Select Open Time');
-
-
-                  }
-                  else
-                  if(closeTimeCon.text.isEmpty)
-                    {
-                      Fluttertoast.showToast(msg: 'Please Select Close Time');
-
-
-                    }
-                  else
-                  if(priceCon.text.isEmpty){
-
-                    Fluttertoast.showToast(msg: 'Please Enter Price');
-
-                  }
-                  else{
-                    addtimeSlot();
-                  }
-
-
-                  },
-                  child:
-
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                        color: colors.secondary,
-                        borderRadius: BorderRadius.circular(40)),
-                    child: Center(
-                      child: Text(
-                        'Add Time Slot',
-                        style: TextStyle(color: Colors.white, fontSize: 14),
-                      ),
-                    ),
-                  ),
-
-
-                ),
-              ],),
-            ):SizedBox(),
-            SizedBox(
+                  )
+                : const SizedBox(),
+            const SizedBox(
               height: 20,
             ),
-            Container(
+            SizedBox(
               height: 40,
               width: MediaQuery.of(context).size.width,
               child: Row(
                 children: [
                   Expanded(
-                    child:
-                    InkWell(
+                    child: InkWell(
                       onTap: () {
-
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => edit_ground(groundDetailResponse: groundDetailResponse),));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditGround(
+                                  groundDetailResponse: groundDetailResponse),
+                            ));
                       },
-                      child:
-
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
                             color: colors.secondary,
                             borderRadius: BorderRadius.circular(40)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             'Edit Ground',
                             style: TextStyle(color: Colors.white, fontSize: 14),
                           ),
                         ),
                       ),
-
-
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 20,
                   ),
                   Expanded(
                     child: InkWell(
                       onTap: () {
-
-
                         showAlertDialog(context);
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
                         decoration: BoxDecoration(
                             color: colors.secondary,
                             borderRadius: BorderRadius.circular(40)),
-                        child: Center(
+                        child: const Center(
                           child: Text(
                             'Delete Ground',
                             style: TextStyle(color: Colors.white, fontSize: 14),
@@ -728,8 +728,9 @@ SizedBox(height: 20,),
                 ],
               ),
             ),
-
-            SizedBox(height: 20,)
+            const SizedBox(
+              height: 20,
+            )
           ],
         ),
       ),
@@ -767,201 +768,143 @@ SizedBox(height: 20,),
       children: [
         Container(
             child: Row(
-              children: [
-                Icon(
-                  Icons.circle,
-                  size: 10,
-                  color: colors.secondary,
-                ),
-                SizedBox(
-                  width: 2,
-                ),
-                Text(
-                  value1,
-                  style: TextStyle(fontSize: 10),
-                ),
-              ],
-            )),
+          children: [
+            const Icon(
+              Icons.circle,
+              size: 10,
+              color: colors.secondary,
+            ),
+            const SizedBox(
+              width: 2,
+            ),
+            Text(
+              value1,
+              style: const TextStyle(fontSize: 10),
+            ),
+          ],
+        )),
         Text(
           value2,
-          style: TextStyle(fontSize: 10),
+          style: const TextStyle(fontSize: 10),
         ),
       ],
     );
   }
 
   Future<void> groundDetails() async {
-
-    isGroundLoading = true ;
-    var parm ={
-      'ground_id' : widget.groundId ?? ''
-    };
-    apiBaseHelper.postAPICall(Uri.parse('${baseUrl}vendor_ground_details'),parm).then((getData) {
+    isGroundLoading = true;
+    var parm = {'ground_id': widget.groundId ?? ''};
+    apiBaseHelper
+        .postAPICall(Uri.parse('${baseUrl}vendor_ground_details'), parm)
+        .then((getData) {
       bool error = getData['status'];
       String msg = getData['message'];
 
       print(getData);
       if (error) {
         // groundList = (getData['data'] as List).map((e) => GroundList.fromJson(e)).toList();
-        groundDetailResponse = GroundDetailResponse.fromJson(getData) ;
+        groundDetailResponse = GroundDetailResponse.fromJson(getData);
 
-if(groundDetailResponse!.data!.bannerImage!.isEmpty)
-  {
-    
-    getbanner.add(groundDetailResponse!.data!.mainImage);
-    setState(() {
+        if (groundDetailResponse!.data!.bannerImage!.isEmpty) {
+          getbanner.add(groundDetailResponse!.data!.mainImage);
+          setState(() {});
+        } else {
+          for (int i = 0;
+              i < groundDetailResponse!.data!.bannerImage!.length;
+              i++) {
+            getbanner.add(groundDetailResponse!.data!.bannerImage![i].image);
+            setState(() {});
+          }
+        }
+        isGroundLoading = false;
 
-    });
-  }
-else{
-  for(int i=0;i<groundDetailResponse!.data!.bannerImage!.length;i++){
-    getbanner.add(groundDetailResponse!.data!.bannerImage![i].image);
-    setState(() {
-
-    });
-  }
-
-}
-        isGroundLoading = false ;
-
-        setState(() {
-
-        });
-
+        setState(() {});
       } else {
         // groundList = [] ;
         Fluttertoast.showToast(msg: msg);
-        isGroundLoading = false ;
-        setState(() {
-
-        });
+        isGroundLoading = false;
+        setState(() {});
         //update();
       }
     });
   }
 
-
   Future<void> Deleteground() async {
-
-    isGroundLoading = true ;
-    var parm ={
-      'ground_id' : widget.groundId ?? ''
-    };
-    apiBaseHelper.postAPICall(deleteGround,parm).then((getData) {
+    isGroundLoading = true;
+    var parm = {'ground_id': widget.groundId ?? ''};
+    apiBaseHelper.postAPICall(deleteGround, parm).then((getData) {
       bool error = getData['status'];
       String msg = getData['message'];
 
-
       if (error) {
-
-
         Fluttertoast.showToast(msg: msg);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder:(context) =>  BottomNavBar()));
-
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => BottomNavBar()));
       } else {
         Fluttertoast.showToast(msg: msg);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder:(context) =>  BottomNavBar()));
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => BottomNavBar()));
 
-        isGroundLoading = false ;
-        setState(() {
-
-        });
+        isGroundLoading = false;
+        setState(() {});
         //update();
       }
     });
   }
 
+  showAlertDialog(BuildContext context) {
+    Widget okButton = OutlinedButton(
+      child: const Text(
+        "Yes",
+        style: TextStyle(color: colors.primary),
+      ),
+      onPressed: () {
+        Deleteground();
+      },
+    );
 
-    showAlertDialog(BuildContext context) {
-      Widget okButton = OutlinedButton(
-        child: Text("Yes",style: TextStyle(color:colors.primary),),
-        onPressed: () {
-          Deleteground();
-        },
-      );
+    Widget okButton2 = OutlinedButton(
+      child: const Text(
+        "No",
+        style: TextStyle(color: colors.primary),
+      ),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+    // set up the button
 
-      Widget okButton2 = OutlinedButton(
-        child: Text("No",style: TextStyle(color:colors.primary),),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      );
-      // set up the button
+    AlertDialog alert = AlertDialog(
+      title: const Text("Are You Sure?"),
+      content: const Text("You Want To Delete Ground"),
+      actions: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            okButton,
+            okButton2,
+          ],
+        )
+      ],
+    );
 
-      AlertDialog alert = AlertDialog(
-        title: Text("Are You Sure?"),
-        content: Text("You Want To Delete Ground"),
-        actions: [
-          Row(
-           mainAxisAlignment: MainAxisAlignment.spaceAround,
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
-            children: [
-              okButton,
-              okButton2,
+  Future<void> addbanner() async {
+    var request =
+        http.MultipartRequest('POST', Uri.parse('${baseUrl}ground_image_add'));
+    request.fields.addAll(
+        {'ground_id': '${groundDetailResponse?.data?.groundId.toString()}'});
+    request.files
+        .add(await http.MultipartFile.fromPath('image', imageFile!.path));
 
-
-
-            ],)
-        ],
-      );
-
-      // show the dialog
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-      );
-    }
-
-
-    Future<void> addbanner() async {
-
-
-      var request = http.MultipartRequest('POST', Uri.parse('${baseUrl}ground_image_add'));
-      request.fields.addAll({
-        'ground_id': '${groundDetailResponse?.data?.groundId.toString()}'
-      });
-      request.files.add(await http.MultipartFile.fromPath('image', imageFile!.path));
-
-      http.StreamedResponse response = await request.send();
-
-      if (response.statusCode == 200) {
-        var result = await response.stream.bytesToString();
-        var finalresult = jsonDecode(result);
-        bool error = finalresult['status'];
-        String msg = finalresult['message'];
-
-        setState(() {
-
-        });
-
-        if (error) {
-
-          Fluttertoast.showToast(msg: msg);
-          Navigator.pop(context);
-
-
-        } else {
-
-
-
-        }
-      }
-      else {
-      print(response.reasonPhrase);
-      }
-    }
-
-  Future<void> deleatebanner(String imageid) async {
-
-
-    var request = http.MultipartRequest('POST', Uri.parse('${baseUrl}ground_image_delete'));
-    request.fields.addAll({
-      'image_id': '${imageid.toString()}'
-    });
-print(request.url);
-print(request.fields);
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
@@ -970,32 +913,46 @@ print(request.fields);
       bool error = finalresult['status'];
       String msg = finalresult['message'];
 
-     setState(() {
-
-     });
-
-
+      setState(() {});
 
       if (error) {
-
         Fluttertoast.showToast(msg: msg);
         Navigator.pop(context);
-setState(() {
-
-});
-
-      } else {
-
-      }
-    }
-    else {
+      } else {}
+    } else {
       print(response.reasonPhrase);
     }
   }
 
+  Future<void> deleatebanner(String imageid) async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('${baseUrl}ground_image_delete'));
+    request.fields.addAll({'image_id': '${imageid.toString()}'});
+    print(request.url);
+    print(request.fields);
+    http.StreamedResponse response = await request.send();
 
-  Future showOptions(BuildContext context,) async {
+    if (response.statusCode == 200) {
+      var result = await response.stream.bytesToString();
+      var finalresult = jsonDecode(result);
+      bool error = finalresult['status'];
+      String msg = finalresult['message'];
 
+      setState(() {});
+
+      if (error) {
+        Fluttertoast.showToast(msg: msg);
+        Navigator.pop(context);
+        setState(() {});
+      } else {}
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  Future showOptions(
+    BuildContext context,
+  ) async {
     showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
@@ -1009,30 +966,25 @@ setState(() {
               getImageFromGallery();
             },
           ),
-
         ],
       ),
     );
   }
 
   File? imageFile;
+
   Future getImageFromGallery() async {
-    var image = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 20
-    );
+    var image = await ImagePicker()
+        .pickImage(source: ImageSource.gallery, imageQuality: 20);
     imageFile = File(image!.path);
     print(imageFile);
-    setState(() {
-
-    });
+    setState(() {});
     addbanner();
 // Navigator.pop(context) ;
-
   }
 
-  bool isaddTimeslot=false;
-var selectdays;
+  bool isaddTimeslot = false;
+  var selectdays;
 
   TextEditingController openTimeCon = TextEditingController();
   TextEditingController closeTimeCon = TextEditingController();
@@ -1054,87 +1006,281 @@ var selectdays;
   TextEditingController priceCon = TextEditingController();
 
   Future<void> addtimeSlot() async {
-
-    isGroundLoading = true ;
-    var parm ={
-      'ground_id' : widget.groundId.toString(),
-      'day' : selectdays.toString(),
-      'opening_time' : openTimeCon.text,
-      'closing_time' : closeTimeCon.text.toString(),
-      'price' : priceCon.text.toString(),
+    isGroundLoading = true;
+    var parm = {
+      'ground_id': widget.groundId.toString(),
+      'day': selectdays.toString(),
+      'opening_time': openTimeCon.text,
+      'closing_time': closeTimeCon.text.toString(),
+      'price': priceCon.text.toString(),
     };
-    apiBaseHelper.postAPICall(Uri.parse('${baseUrl}add_offers_slots'),parm).then((getData) {
+    apiBaseHelper
+        .postAPICall(Uri.parse('${baseUrl}add_offers_slots'), parm)
+        .then((getData) {
       bool error = getData['status'];
       String msg = getData['message'];
-
 
       if (error) {
         Fluttertoast.showToast(msg: msg.toString());
 
-Navigator.pop(context);
+        Navigator.pop(context);
         setState(() {
-
-          isaddTimeslot=false;
+          isaddTimeslot = false;
         });
-
       } else {
         Fluttertoast.showToast(msg: msg.toString());
         setState(() {
-
-          isaddTimeslot=false;
+          isaddTimeslot = false;
         });
-
       }
     });
   }
 
   final _formKey = GlobalKey<FormState>();
 
-  List<SlotList>getslotList=[];
-  GettimeslotList?gettimeslotList;
-  Future<void> getSlot() async {
+  List<SlotList> getslotList = [];
+  GettimeslotList? gettimeslotList;
 
-    isGroundLoading = true ;
-    var parm ={
-      'ground_id' : widget.groundId.toString(),
+  Future<void> getSlot() async {
+    isGroundLoading = true;
+    var parm = {
+      'ground_id': widget.groundId.toString(),
     };
-    apiBaseHelper.postAPICall(Uri.parse('${baseUrl}get_offers_slots'),parm).then((getData) {
+    apiBaseHelper
+        .postAPICall(Uri.parse('${baseUrl}get_offers_slots'), parm)
+        .then((getData) {
       bool error = getData['status'];
       String msg = getData['message'];
 
-
       if (error) {
-
         setState(() {
-          getslotList =GettimeslotList.fromJson(getData).data;
+          getslotList = GettimeslotList.fromJson(getData).data;
 
           print("================${getslotList.length}");
         });
-
       }
     });
   }
 
-  Future<void> deleteSlot(String slotId) async {
-
-    isGroundLoading = true ;
-    var parm ={
-
-      'time_slot_id' : slotId.toString(),
+  Future<void> deleteOfferSlot(String slotId) async {
+    isGroundLoading = true;
+    var parm = {
+      'time_slot_id': slotId.toString(),
     };
-    apiBaseHelper.postAPICall(Uri.parse('${baseUrl}delete_offers_slots'),parm).then((getData) {
+    apiBaseHelper
+        .postAPICall(Uri.parse('${baseUrl}delete_offers_slots'), parm)
+        .then((getData) {
       bool error = getData['status'];
       String msg = getData['message'];
-
 
       if (error) {
         Fluttertoast.showToast(msg: msg.toString());
 
         Navigator.pop(context);
-
-
-      } else {
-      }
+      } else {}
     });
   }
+
+  generate_tags() {
+    return groundDetailResponse?.data?.groundTimeSlotes?.map((tag) => get_chip('${tag.fromTime} to ${tag.toTime}', tag.id ?? 0)).toList();
+  }
+  get_chip(name, int id) {
+    int? index = groundDetailResponse?.data?.groundTimeSlotes?.indexWhere((element) => '${element.fromTime} to ${element.toTime}' == name  ) ;
+    return Row(children: [
+      Stack(children: [
+        FilterChip(
+          selected: true/*selected_tags.contains(name)*/,
+          selectedColor: colors.secondary,
+          disabledColor: colors.secondary,
+          labelStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          label: Text("${name}"), onSelected: (bool value) {  },),
+        Positioned(
+            right: 0,
+            top: 0,
+            child: InkWell(
+              onTap: (){
+                deleteTimeSlot(id.toString());
+              },
+              child: Container(
+
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: colors.primary),
+                  height: 15,
+                  child: const Icon(Icons.remove,size: 15,)),
+            ))
+      ],),
+      index == (groundDetailResponse!.data!.groundTimeSlotes!.length  - 1) ?  Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: colors.primary),
+            onPressed: (){
+              addTiSlot(
+                 context,
+              ) ;
+            }, child: const Text('AddMore')),
+      ) : SizedBox()
+    ],);
+  }
+
+
+  Future<void> deleteTimeSlot(String slotId) async {
+    isGroundLoading = true;
+    var parm = {
+      'slot_id': slotId,
+    };
+    apiBaseHelper
+        .postAPICall(Uri.parse('${baseUrl}delete_ground_slots'), parm)
+        .then((getData) {
+      bool error = getData['status'];
+      String msg = getData['message'];
+
+      if (error) {
+        Fluttertoast.showToast(msg: msg.toString());
+
+        Navigator.pop(context);
+      } else {}
+    });
+  }
+
+  Future<void> addTimeSlotApi() async {
+    isGroundLoading = true;
+    var parm = {
+    'ground_id':widget.groundId.toString(),
+    'from_time':fromTimeC.text,
+    'to_time':toTimeC.text,
+    };
+    apiBaseHelper
+        .postAPICall(Uri.parse('${baseUrl}create_ground_slots'), parm)
+        .then((getData) {
+      bool error = getData['status'];
+      String msg = getData['message'];
+
+      if (error) {
+        Fluttertoast.showToast(msg: msg.toString());
+
+        Navigator.pop(context);
+      } else {}
+    });
+  }
+
+  TextEditingController fromTimeC = TextEditingController();
+  TextEditingController toTimeC = TextEditingController();
+
+  Future addTiSlot(
+      BuildContext context,
+      ) async {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (context) => Material(
+        child: CupertinoActionSheet(
+
+          title: const Text('Add Time Slot',textAlign: TextAlign.left,),
+          actions: [
+            CupertinoActionSheetAction(
+              child: Column(
+                children: [
+                  Row(children: [
+                    Expanded(
+                      flex: 3,
+                      child: TextFormField(
+                        controller:fromTimeC,
+                        keyboardType: TextInputType.visiblePassword,
+                        readOnly: true,
+                        onTap: () async {
+                          TimeOfDay? picked =
+                          await selectTime(context);
+                          if (picked != null) {
+                            DateTime dateTime = DateTime(2020, 10,
+                                10, picked!.hour, picked!.minute);
+                            setState(() {
+                              fromTimeC
+                                  .text =
+                              "${DateFormat("HH").format(dateTime)}:00";
+
+                              print(openTimeCon.text);
+                            });
+                          }
+                        },
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          hintText: "From:",
+                          fillColor: Colors.white,
+                          filled: true,
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.white)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.white)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: TextFormField(
+                        controller: toTimeC,
+                        keyboardType: TextInputType.visiblePassword,
+                        readOnly: true,
+                        onTap: () async {
+                          TimeOfDay? picked =
+                          await selectTime(context);
+                          if (picked != null) {
+                            DateTime dateTime = DateTime(2020, 10,
+                                10, picked!.hour, picked!.minute);
+                            setState(() {
+                              toTimeC.text =
+                              "${DateFormat("HH").format(dateTime)}:00";
+
+                              print(closeTimeCon.text);
+                            });
+                          }
+                        },
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          hintText: "To:",
+                          fillColor: Colors.white,
+                          filled: true,
+                          enabledBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.white)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.white)),
+                        ),
+                      ),
+                    ),
+                  ],),
+                  const SizedBox(height: 20,),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(backgroundColor: colors.primary),
+                      onPressed: (){
+                        if(fromTimeC.text.isEmpty){
+                          Fluttertoast.showToast(msg: 'Please add fromTime');
+                        }else if (toTimeC.text.isEmpty) {
+                          Fluttertoast.showToast(msg: 'Please add toTime');
+                        }else {
+                          Navigator.of(context).pop();
+                          addTimeSlotApi();
+                        }
+
+                      }, child: const Text('Add'))
+
+                ],
+              ),
+              onPressed: () {
+                // close the options modal
+                Navigator.of(context).pop();
+                // get image from gallery
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+
 }

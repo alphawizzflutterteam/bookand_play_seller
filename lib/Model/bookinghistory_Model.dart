@@ -49,6 +49,7 @@ class DataNew {
   DateTime? updatedAt;
   String address;
   String title;
+  String?img;
 
   DataNew({
     required this.id,
@@ -72,6 +73,7 @@ class DataNew {
     required this.updatedAt,
     required this.address,
     required this.title,
+     this.img,
   });
 
   factory DataNew.fromJson(Map<String, dynamic> json) => DataNew(
@@ -96,6 +98,7 @@ class DataNew {
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     address: json["address"].toString(),
     title: json["title"].toString(),
+    img: json["groundimage"].toString(),
   );
 
   Map<String, dynamic> toJson() => {
@@ -120,5 +123,6 @@ class DataNew {
     "updated_at": updatedAt?.toIso8601String(),
     "address": address,
     "title": title,
+    "groundimage": img,
   };
 }

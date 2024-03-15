@@ -60,6 +60,7 @@ class Datum {
   DateTime updatedAt;
   String address;
   String title;
+  String imgGround;
 
   Datum({
     required this.id,
@@ -89,6 +90,7 @@ class Datum {
     required this.updatedAt,
     required this.address,
     required this.title,
+    required this.imgGround,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -119,6 +121,7 @@ class Datum {
     updatedAt: DateTime.parse(json["updated_at"]),
     address: json["address"],
     title: json["title"],
+    imgGround: json["groundimage"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -149,5 +152,6 @@ class Datum {
     "updated_at": updatedAt.toIso8601String(),
     "address": address,
     "title": title,
+    "groundimage": imgGround,
   };
 }

@@ -356,3 +356,13 @@ class AlertBox {
   }
 
 }
+
+Map<String, String> addMapListToData(
+    Map<String, String> data, List<Map<String, dynamic>> mapList) {
+  for (var map in mapList) {
+    map.forEach((key, value) {
+      data[key] = value;
+    });
+  }
+  return data;
+}

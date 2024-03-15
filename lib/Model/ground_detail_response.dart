@@ -1,3 +1,5 @@
+import 'package:bookplayapp/Model/getSlotModel.dart';
+
 class GroundDetailResponse {
   bool? status;
   String? message;
@@ -43,9 +45,11 @@ class GroundDetailData {
   String? description;
   List<String>? facility;
   List<BannerImage>? bannerImage;
+  List<GroundTimeSlotes>? groundTimeSlotes;
 
   GroundDetailData(
       {this.groundId,
+        this.groundTimeSlotes,
         this.categoryId,
         this.vendorId,
         this.title,
@@ -89,7 +93,13 @@ class GroundDetailData {
     if (json['banner_image'] != null) {
       bannerImage = <BannerImage>[];
       json['banner_image'].forEach((v) {
-        bannerImage!.add(new BannerImage.fromJson(v));
+        bannerImage!.add( BannerImage.fromJson(v));
+      });
+    }
+    if (json['ground_time_slotes'] != null) {
+      groundTimeSlotes = <GroundTimeSlotes>[];
+      json['ground_time_slotes'].forEach((v) {
+        groundTimeSlotes!.add( GroundTimeSlotes.fromJson(v));
       });
     }
   }
@@ -137,6 +147,43 @@ class BannerImage {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['image_id'] = this.imageId;
     data['image'] = this.image;
+    return data;
+  }
+}
+
+class GroundTimeSlotes {
+  int? id;
+  int? groundId;
+  String? fromTime;
+  String? toTime;
+  String? createdAt;
+  String? updatedAt;
+
+  GroundTimeSlotes(
+      {this.id,
+        this.groundId,
+        this.fromTime,
+        this.toTime,
+        this.createdAt,
+        this.updatedAt});
+
+  GroundTimeSlotes.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    groundId = json['ground_id'];
+    fromTime = json['from_time'];
+    toTime = json['to_time'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['ground_id'] = this.groundId;
+    data['from_time'] = this.fromTime;
+    data['to_time'] = this.toTime;
+    data['created_at'] = this.createdAt;
+    data['updated_at'] = this.updatedAt;
     return data;
   }
 }

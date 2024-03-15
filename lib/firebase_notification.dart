@@ -1,12 +1,9 @@
-/*
 import 'dart:math';
-*/
-
-import 'dart:math';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/material.dart';
+
+
 
 class LocalNotificationService {
   BuildContext? context;
@@ -16,10 +13,9 @@ class LocalNotificationService {
   static void initialize() async {
     const InitializationSettings initializationSettings =
     InitializationSettings(
-      android: AndroidInitializationSettings(
-          "@mipmap/ic_launcher"),
-      //iOS: DarwinInitializationSettings()
-    );
+        android: AndroidInitializationSettings(
+            "@mipmap/ic_launcher"),
+        iOS: DarwinInitializationSettings());
     _flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     NotificationSettings settings =
@@ -44,6 +40,12 @@ class LocalNotificationService {
         print("FirebaseMessaging.instance.getInitialMessage");
         if (message != null) {
           print("New Notification");
+          print('${message.notification}_________3________');
+          print('${message.notification!.body}_________body3____');
+          print("message.data13 ${message.data}");
+          /*if(message.data['driver_id']!= null) {
+            Get.to( FeedbackScreen(driverId:  message.data['driver_id'],driverName: message.data['user_fullname'],parcelId: message.data['parcel_id'] ,));
+          }*/
           // if (message.data['_id'] != null) {
           //   Navigator.of(context).push(
           //     MaterialPageRoute(
@@ -61,13 +63,17 @@ class LocalNotificationService {
           (message) {
         print("FirebaseMessaging.onMessage______________");
         if (message.notification != null) {
-          print('${message.notification}_________________');
+          print('${message.notification}___________1______');
           print('${message.notification!.body}_________body____');
+          print("message.data11 ${message.data['driver_id']}");
           print("message.data11 ${message.data}");
-
+          print("message.data11 ${message.data['user_fullname']}");
+          /*if(message.data['driver_id']!= null) {
+            Get.to( FeedbackScreen(driverId:  message.data['driver_id'],driverName: message.data['user_fullname'],parcelId: message.data['parcel_id'] ,));
+          }*/
           display(message);
 
-          //handleNotification(message.data);
+          handleNotification(message.data);
 
         }
       },
@@ -77,13 +83,16 @@ class LocalNotificationService {
           (message) {
         print("FirebaseMessaging.onMessageOpenedApp___________");
         if (message.notification != null) {
-          print('_____________${message.notification}_______________');
+          print('_____________${message.notification}______2_________');
           print('_____________${message.notification?.title}_______________');
           print(message.notification!.body);
           print("message.data22 ${message.data}");
+          /*if(message.data['driver_id']!= null) {
+            Get.to( FeedbackScreen(driverId:  message.data['driver_id'],driverName: message.data['user_fullname'],parcelId: message.data['parcel_id'] ,));
+          }*/
 
-
-          //handleNotification(message.data);
+          // Get.to(FeedbackScreen());
+          handleNotification(message.data);
 
           // HomeScreenState().setSegmentValue(2) ;
 
@@ -116,14 +125,12 @@ class LocalNotificationService {
       // int id = DateTime.now().microsecondsSinceEpoch ~/1000000;
       Random random = Random();
       int id = random.nextInt(1000);
-      NotificationDetails notificationDetails = NotificationDetails(
+      const NotificationDetails notificationDetails = NotificationDetails(
           android: AndroidNotificationDetails(
-            "Book N Play Vendor",
-            "Book N Play Vendor",
-            "Book N Play Vendor",
-
+            "BookNPlay",
+            "BookNPlay",
             importance: Importance.max,
-            priority: Priority.high,
+            priority: Priority.max,
           ));
       //print("my id is ${id.toString()}");
       await _flutterLocalNotificationsPlugin.show(
@@ -141,6 +148,5 @@ class LocalNotificationService {
 
 }
 
-Future<dynamic> myForgroundMessageHandler(RemoteMessage message) async {
-  return Future<void>.value();
-}
+
+

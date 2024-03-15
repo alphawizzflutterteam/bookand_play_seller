@@ -251,6 +251,7 @@ Column(children: [
 ],):
 
 TextFormField(
+  keyboardType: TextInputType.number,
   maxLength: 10,
   controller: mobilecontroller,
   decoration: InputDecoration(
@@ -402,6 +403,7 @@ if(num==0){
       'password': passwordC.text,
       'device_key': '${devvicekey.toString()}',
     };
+
     apiBaseHelper.postAPICall(getUserLogin, param).then((getData) async {
       bool error = getData['status'];
       String msg = getData['message'];

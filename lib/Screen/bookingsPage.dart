@@ -125,13 +125,15 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                                     children: [
                                       Expanded(
                                         child: Container(
+                                          // height: 70,
+                                          // width: 70,
                                           decoration: BoxDecoration(
-                                            // image: DecorationImage(
-                                            //     image: AssetImage('assets/images/Group 75122.png')),
-                                              borderRadius: BorderRadius.circular(30)),
-                                          child:const Image(
-                                              image: AssetImage('assets/images/Group 75122.png'),
-                                              fit: BoxFit.fill),
+                                            image: DecorationImage(
+                                                image: NetworkImage('${bookingHistory?.data[index].img}'),fit: BoxFit.fill),
+                                              borderRadius: BorderRadius.circular(8)),
+                                          // child:const Image(
+                                          //     image: AssetImage('assets/images/Group 75122.png'),
+                                          //     fit: BoxFit.fill),
                                         ),
                                       ),
                                       Text(

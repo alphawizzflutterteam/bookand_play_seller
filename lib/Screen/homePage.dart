@@ -61,300 +61,315 @@ class _HomePageWidgetState extends State<HomePageWidget> {
         backgroundColor: colors.btn,
         child:const Icon(Icons.add),
       ),
-      body: isLoading?const Center(child: CircularProgressIndicator(),) : Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        margin: const EdgeInsets.only(top: 20),
-        child: ListView(
-          children: [
-            Card(
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(5))),
-              elevation: 2,
-              child: TextFormField(
-                onChanged: (value) {
+      body: isLoading?const Center(child: CircularProgressIndicator(),) :
 
 
-                  searchLeads(value);
-                },
-                decoration: InputDecoration(
-                  contentPadding:
-                  const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                  fillColor: Colors.white,
-                  filled: true,
-                  hintText: 'Search Ground',
-                  hintStyle: const TextStyle(color: colors.test,fontSize: 13,fontWeight: FontWeight.bold),
-                  prefixIcon: const Icon(
-                    Icons.search,size: 25,
-                    color: Colors.black,
-                  ),
-suffixIcon: IconButton(
-icon: Icon(Icons.calendar_month_sharp,color: Colors.black,)
-,onPressed: () {
-setState(() {
 
-});
-  _showMyDialog();
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          margin: const EdgeInsets.only(top: 20),
+          child:
+          RefreshIndicator(
+            onRefresh: ()async {
+              homeCategory();
+              vendorHomeData();
+              getProfile();
 
-},),
-                  focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.white, width: 1)),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.white, width: 1)),
-                  errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.white, width: 1)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: const BorderSide(color: Colors.white, width: 1)),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            },
+            child: ListView(
               children: [
+                Card(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(5))),
+                  elevation: 2,
+                  child: TextFormField(
+                    onChanged: (value) {
 
 
-                InkWell(
-                    onTap: () {
-
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>Totalbooking(vendorHomeResponse: vendorHomeResponse),));
-
-
+                      searchLeads(value);
                     },
-                    child: topContainer(title: 'Booking', value: '${vendorHomeResponse?.data.totalBooking.count??0}')),
+                    decoration: InputDecoration(
+                      contentPadding:
+                      const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      fillColor: Colors.white,
+                      filled: true,
+                      hintText: 'Search Ground',
+                      hintStyle: const TextStyle(color: colors.test,fontSize: 13,fontWeight: FontWeight.bold),
+                      prefixIcon: const Icon(
+                        Icons.search,size: 25,
+                        color: Colors.black,
+                      ),
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.calendar_month_sharp,color: Colors.black,)
+                        ,onPressed: () {
+                        setState(() {
 
+                        });
+                        _showMyDialog();
 
-                InkWell(
-
-                    onTap: () {
-
-
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>Upcoming_booking(vendorHomeResponse: vendorHomeResponse),));
-                    },
-
-                    child: topContainer(title: 'Upcoming Bookings', value: '${vendorHomeResponse?.data.upcomingBooking.count??0}')),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-
-
-                InkWell(
-                    onTap: () {
-
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>Total_earning(vendorHomeResponse: vendorHomeResponse),));
-
-
-                    },
-                    child: topContainer(title: 'Total Earning', value: '${vendorHomeResponse?.data.totalEarning.count??0}')),
-
-                InkWell(
-
-                    onTap: () {
-
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>Previousbooking( vendorHomeResponse: vendorHomeResponse),));
-
-
-                    },
-                    child: topContainer(title: 'Previous Bookings', value: '${vendorHomeResponse?.data.previousBooking.count??0}'))
-              ],
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            const Text(
-              'Categories',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            catList.isEmpty?Container(
-              height: 60,
-              child: Center(child: Text("Categories Not Found"),),):
-            // getCatListView(),
-
-
-            SingleChildScrollView(
-
-              child: Row(
-                children: [
-
-                  Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width/1.2
-
-
-
-                    ,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      itemCount: catList.length??0,
-                      itemBuilder: (context, index) {
-                        return
-
-
-                          InkWell(
-                            onTap: () {
-
-                           selectedCategory(index);
-
-
-                            },
-                            child: Card(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color:
-
-                                  catCurrentIndex==index?colors.secondary:
-                                  Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      blurRadius: 10,
-                                      spreadRadius: 0,
-                                    ),
-                                  ],
-                                  borderRadius:
-                                  BorderRadius.circular(5.0),
-                                ),
-                                height: 40,
-                                width: 105,
-                                child: Center(
-                                  child:
-
-                                  Text(
-                                    '${catList[index].title}',
-                                    style: TextStyle(fontSize: 13),
-
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-
-
-                      },
+                      },),
+                      focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Colors.white, width: 1)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Colors.white, width: 1)),
+                      errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Colors.white, width: 1)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(color: Colors.white, width: 1)),
                     ),
                   ),
-                ],
-              ),
-            ),
-
-
-            SizedBox(height: 2,),
-            sliderPointers (),
-           const SizedBox(
-              height: 15,
-            ),
-            const Text(
-              'My Ground',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            groundList.isEmpty?Container(
-
-              height: MediaQuery.of(context).size.height/5,
-              child: Center(child: Text("No Ground Found Please add the ground",style: TextStyle(fontWeight: FontWeight.bold),),),
-            ):
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                primary: false,
-                padding: const EdgeInsets.all(0),
-                itemCount: groundList.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10.0,
                 ),
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>  GolfGroungScreen(groundId: groundList[index].id.toString(),)),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey,
-                          image: DecorationImage(
-                              image: NetworkImage(groundList[index].image!),
-                              fit: BoxFit.fill)),
-                      child: Container(
-                        margin: const EdgeInsets.only(top: 100),
-                        color: Colors.transparent.withOpacity(0.3),
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child:  Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              groundList[index].title ?? '',
-                              style:const  TextStyle(color: Colors.white, fontSize: 14),
-                            ),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.location_on_outlined,
-                                  color: Colors.white,
-                                ),
-                                SizedBox(
-                                  width: MediaQuery.of(context).size.width/3.5,
-                                  child: Text(
-
-                                    groundList[index].address ?? '',
-                                    style: TextStyle(
-
-                                        color: Colors.white, fontSize: 12,
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
 
 
+                    InkWell(
+                        onTap: () {
+
+                          Navigator.push(context, MaterialPageRoute(builder: (context) =>Totalbooking(vendorHomeResponse: vendorHomeResponse),));
+
+
+                        },
+                        child: topContainer(title: 'Booking', value: '${vendorHomeResponse?.data.totalBooking.count??0}')),
+
+
+                    InkWell(
+
+                        onTap: () {
+
+
+                          Navigator.push(context, MaterialPageRoute(builder: (context) =>Upcoming_booking(vendorHomeResponse: vendorHomeResponse),));
+                        },
+
+                        child: topContainer(title: 'Upcoming Bookings', value: '${vendorHomeResponse?.data.upcomingBooking.count??0}')),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+
+
+                    InkWell(
+                        onTap: () {
+
+                          Navigator.push(context, MaterialPageRoute(builder: (context) =>Total_earning(vendorHomeResponse: vendorHomeResponse),));
+
+
+                        },
+                        child: topContainer(title: 'Total Earning', value: '${vendorHomeResponse?.data.totalEarning.count??0}')),
+
+                    InkWell(
+
+                        onTap: () {
+
+                          Navigator.push(context, MaterialPageRoute(builder: (context) =>Previousbooking( vendorHomeResponse: vendorHomeResponse),));
+
+
+                        },
+                        child: topContainer(title: 'Previous Bookings', value: '${vendorHomeResponse?.data.previousBooking.count??0}'))
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Text(
+                  'Categories',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                catList.isEmpty?Container(
+                  height: 60,
+                  child: Center(child: Text("Categories Not Found"),),):
+                // getCatListView(),
+
+
+                SingleChildScrollView(
+
+                  child: Row(
+                    children: [
+
+                      Container(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width/1.2
+
+
+
+                        ,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          physics: AlwaysScrollableScrollPhysics(),
+                          itemCount: catList.length??0,
+                          itemBuilder: (context, index) {
+                            return
+
+
+                              InkWell(
+                                onTap: () {
+
+                                  selectedCategory(index);
+
+
+                                },
+                                child: Card(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color:
+
+                                      catCurrentIndex==index?colors.secondary:
+                                      Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          blurRadius: 10,
+                                          spreadRadius: 0,
+                                        ),
+                                      ],
+                                      borderRadius:
+                                      BorderRadius.circular(5.0),
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
+                                    height: 40,
+                                    width: 105,
+                                    child: Center(
+                                      child:
+
+                                      Text(
+                                        '${catList[index].title}',
+                                        style: TextStyle(fontSize: 13),
+
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ],
-                            )
-                          ],
+                              );
+
+
+                          },
                         ),
                       ),
+                    ],
+                  ),
+                ),
+
+
+                const SizedBox(height: 2,),
+                sliderPointers (),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Text(
+                  'My Ground',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                groundList.isEmpty?SizedBox(
+
+                  height: MediaQuery.of(context).size.height/5,
+                  child: const Center(child: Text("No Ground Found Please add the ground",style: TextStyle(fontWeight: FontWeight.bold),),),
+                ):
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    primary: false,
+                    padding: const EdgeInsets.all(0),
+                    itemCount: groundList.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10.0,
                     ),
-                  );
-                },
-              ),
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>  GolfGroungScreen(groundId: groundList[index].id.toString(),)),
+                          );
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey,
+                              image: DecorationImage(
+                                  image: NetworkImage(groundList[index].image!),
+                                  fit: BoxFit.fill)),
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 100),
+                            color: Colors.transparent.withOpacity(0.3),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child:  Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  groundList[index].title ?? '',
+                                  style:const  TextStyle(color: Colors.white, fontSize: 14),
+                                ),
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.location_on_outlined,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width/3.5,
+                                      child: Text(
+
+                                        groundList[index].address ?? '',
+                                        style: TextStyle(
+
+                                          color: Colors.white, fontSize: 12,
+
+
+                                        ),
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                )
+              ],
             ),
-            const SizedBox(
-              height: 30,
-            )
-          ],
+          ),
+
+
         ),
-      ),
     );
   }
   int catCurrentIndex = 0 ;
@@ -717,7 +732,7 @@ Navigator.pop(context);
 
       selectedDate = picked;
     datecontroller.text=
-        DateFormat('yyyy-MM-dd').format(selectedDate);
+        DateFormat('dd-MM-yyyy').format(selectedDate);
     print("==================${datecontroller.text}");
 
 

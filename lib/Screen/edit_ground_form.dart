@@ -424,7 +424,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-
 import 'package:bookplayapp/Helper/color.dart';
 import 'package:bookplayapp/Helper/common.dart';
 import 'package:bookplayapp/Model/cat_model.dart';
@@ -446,15 +445,16 @@ import '../Model/getfaciluityModel.dart';
 import '../Model/ground_detail_response.dart';
 import 'bottomScreen.dart';
 
-class edit_ground extends StatefulWidget {
-  GroundDetailResponse?groundDetailResponse;
-   edit_ground({super.key,this.groundDetailResponse});
+class EditGround extends StatefulWidget {
+  GroundDetailResponse? groundDetailResponse;
+
+  EditGround({super.key, this.groundDetailResponse});
 
   @override
-  State<edit_ground> createState() => _edit_groundState();
+  State<EditGround> createState() => _EditGroundState();
 }
 
-class _edit_groundState extends State<edit_ground> {
+class _EditGroundState extends State<EditGround> {
   TextEditingController nameCon = TextEditingController();
   TextEditingController priceCon = TextEditingController();
   TextEditingController descCon = TextEditingController();
@@ -463,16 +463,17 @@ class _edit_groundState extends State<edit_ground> {
   TextEditingController closeTimeCon = TextEditingController();
   bool loading = false;
   bool network = false;
-  List<Datum> facilityList = [
-  ];
+  List<Datum> facilityList = [];
   List<CatModel> catList = [];
   String catId = "";
   List<String> selectedFacility = [];
   List<String> selectedHoliday = [];
+
   // List<File> imageList = [];
   FocusNode passNode = FocusNode();
   ApiBaseHelper apiBaseHelper = ApiBaseHelper();
   String deviceDetails = "";
+
 //   pickFile() async {
 //     final ImagePicker picker = ImagePicker();
 // // Pick an image.
@@ -492,7 +493,6 @@ class _edit_groundState extends State<edit_ground> {
     network = true;
 
     if (network) {
-
       var response = await apiBaseHelper.getAPICall(
         Uri.parse("${baseUrl}ground_category"),
       );
@@ -515,9 +515,7 @@ class _edit_groundState extends State<edit_ground> {
   }
 
   Future<TimeOfDay?> selectTime(BuildContext context) async {
-
     final TimeOfDay? picked = await showTimePicker(
-
         context: context,
         initialTime: TimeOfDay.now(),
         builder: (BuildContext? context, Widget? child) {
@@ -531,8 +529,6 @@ class _edit_groundState extends State<edit_ground> {
   }
 
   void updateGroundApi() async {
-
-
     await App.init();
 
     ///MultiPart request
@@ -541,7 +537,7 @@ class _edit_groundState extends State<edit_ground> {
       try {
         Map<String, String> param = {
           "address_link": '${locationLink.toString()}',
-          "holiday": holidaydate.toString(),
+          "holiday": selectedHoliday.join(','),
           "ball_type": selectballcontroller.text,
           "ball_given": nomberofballcontroller.text,
           "title": nameCon.text,
@@ -552,7 +548,8 @@ class _edit_groundState extends State<edit_ground> {
           "description": descCon.text,
           "default_price": priceCon.text,
           "category_id": catId.toString(),
-          "ground_id": widget.groundDetailResponse?.data?.groundId.toString()??'',
+          "ground_id":
+              widget.groundDetailResponse?.data?.groundId.toString() ?? '',
         };
         var request = http.MultipartRequest(
           'POST',
@@ -578,10 +575,13 @@ class _edit_groundState extends State<edit_ground> {
         if (res.statusCode == 200) {
           Map data = jsonDecode(respStr.toString());
           if (data['status']) {
-         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => BottomNavBar(),));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => BottomNavBar(),
+                ));
             Fluttertoast.showToast(msg: data['message'].toString());
-          } else {
-          }
+          } else {}
         }
       } on TimeoutException catch (_) {
         Fluttertoast.showToast(msg: "Something Went Wrong".toString());
@@ -607,51 +607,44 @@ class _edit_groundState extends State<edit_ground> {
     getfacility();
     getCategory();
     setState(() {
+      nameCon.text = widget.groundDetailResponse?.data?.title ?? '';
+      addressCon.text = widget.groundDetailResponse?.data?.address ?? '';
+      priceCon.text =
+          widget.groundDetailResponse?.data?.defaultPrice.toString() ?? '';
+      descCon.text = widget.groundDetailResponse?.data?.description ?? '';
+      closeTimeCon.text = widget.groundDetailResponse?.data?.closingTime ?? '';
+      openTimeCon.text = widget.groundDetailResponse?.data?.openingTime ?? '';
+      holydaycontroller.text = widget.groundDetailResponse?.data?.holiday ?? '';
 
-    nameCon.text=widget.groundDetailResponse?.data?.title??'';
-    addressCon.text=widget.groundDetailResponse?.data?.address??'';
-    priceCon.text=widget.groundDetailResponse?.data?.defaultPrice.toString()??'';
-    descCon.text=widget.groundDetailResponse?.data?.description??'';
-    closeTimeCon.text=widget.groundDetailResponse?.data?.closingTime??'';
-    openTimeCon.text=widget.groundDetailResponse?.data?.openingTime??'';
- holydaycontroller.text=widget.groundDetailResponse?.data?.holiday??'';
-    nomberofballcontroller.text=widget.groundDetailResponse?.data?.ballGiven.toString()??'';
-    _selectedLocation=widget.groundDetailResponse?.data?.ballType??'';
+      nomberofballcontroller.text =
+          widget.groundDetailResponse?.data?.ballGiven.toString() ?? '';
+      _selectedBall = widget.groundDetailResponse?.data?.ballType == 'Tennis' ||
+          widget.groundDetailResponse?.data?.ballType == 'Leather' ||
+          widget.groundDetailResponse?.data?.ballType == 'Tennis/Leather Both' ?widget.groundDetailResponse?.data?.ballType : null;
 
+      setState(() {
+        catId = widget.groundDetailResponse?.data?.categoryId.toString() ?? '';
 
+        print("=getcat===========${catId}");
+      });
 
-    setState(() {
-
-
-      catId=widget.groundDetailResponse?.data?.categoryId.toString()??'';
-
-      print("=getcat===========${catId}");
-    });
-
-    for(int i=0;i<widget.groundDetailResponse!.data!.facility!.length;i++)
-      {
+      for (int i = 0;
+          i < widget.groundDetailResponse!.data!.facility!.length;
+          i++) {
         selectedFacility.add(widget.groundDetailResponse!.data!.facility![i]);
-        setState(() {
-
-        });
+        setState(() {});
       }
 
-    var holyday =widget.groundDetailResponse!.data!.holiday!;
-     selectedHoliday = holyday.split(',');
+      var holyday = widget.groundDetailResponse!.data!.holiday!;
+      selectedHoliday = holyday.split(',');
 
-setState(() {
-
-});
+      setState(() {});
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-
-
-
-    });
+    setState(() {});
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -672,7 +665,6 @@ setState(() {
             "Ground Form",
           ),
         ),
-
         backgroundColor: const Color(0xff96E7F7),
         body: Container(
           width: double.infinity,
@@ -760,7 +752,6 @@ setState(() {
                   ),
                   TextFormField(
                     onTap: () {
-
                       showPlacePicker();
                     },
                     readOnly: true,
@@ -799,7 +790,7 @@ setState(() {
                             2020, 10, 10, picked!.hour, picked!.minute);
                         setState(() {
                           openTimeCon.text =
-                          "${DateFormat("HH").format(dateTime)}:00";
+                              "${DateFormat("HH").format(dateTime)}:00";
                           print(openTimeCon.text);
                         });
                       }
@@ -836,7 +827,7 @@ setState(() {
                             2020, 10, 10, picked!.hour, picked!.minute);
                         setState(() {
                           closeTimeCon.text =
-                          "${DateFormat("HH").format(dateTime)}:00";
+                              "${DateFormat("HH").format(dateTime)}:00";
                           print(closeTimeCon.text);
                         });
                       }
@@ -863,51 +854,54 @@ setState(() {
                     height: 5,
                   ),
 
-                  catList.isEmpty?Container(
-                    height: 50,
-                    child: Center(child: Text('Categorys Not Avaiable'),),):
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: catList.map((e) {
-                        print("cati indec id =========${e.id.toString()} ${catId}");
-                        return InkWell(
-                          onTap: () {
-                            setState(() {
-
-                              catId = e.id.toString();
-
-                              print(catId);
-                              print(catId.runtimeType);
-                            });
-                          },
-                          child: Container(
-                            color: catId == e.id.toString()
-                                ? colors.btn
-                                :Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 7),
-                            margin: const EdgeInsets.only(right: 10),
-                            child: Text(
-                              e.title ?? "",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge!
-                                  .copyWith(
-                                  color: catId == e.id.toString()
-                                      ? Colors.white
-                                      : Colors.black),
-                            ),
+                  catList.isEmpty
+                      ? Container(
+                          height: 50,
+                          child: Center(
+                            child: Text('Categorys Not Avaiable'),
                           ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
+                        )
+                      : SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: catList.map((e) {
+                              print(
+                                  "cati indec id =========${e.id.toString()} ${catId}");
+                              return InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    catId = e.id.toString();
+
+                                    print(catId);
+                                    print(catId.runtimeType);
+                                  });
+                                },
+                                child: Container(
+                                  color: catId == e.id.toString()
+                                      ? colors.btn
+                                      : Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 7),
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Text(
+                                    e.title ?? "",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge!
+                                        .copyWith(
+                                            color: catId == e.id.toString()
+                                                ? Colors.white
+                                                : Colors.black),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
                   const SizedBox(
                     height: 10,
                   ),
-                  
-                  
+
                   Text(
                     "Facility",
                     style: Theme.of(context).textTheme.bodyLarge,
@@ -916,48 +910,52 @@ setState(() {
                     height: 5,
                   ),
 
-                  facilityList.isEmpty?SizedBox(
-                    height: 40,
-                    child: Center(child: Text("Facility Not Avaiable"),),
-                  ):
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: facilityList.map((e) {
-                        return InkWell(
-                          onTap: () {
-                            if (selectedFacility.contains(e.title)) {
-                              setState(() {
-                                selectedFacility.remove(e.title);
-                              });
-                            } else {
-                              setState(() {
-                                selectedFacility.add(e.title);
-                              });
-                            }
-                          },
-                          child: Container(
-                            color: selectedFacility.contains(e.title)
-                                ? colors.btn
-                                : Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 7),
-                            margin: const EdgeInsets.only(right: 10),
-                            child: Text(e.title
-                              ,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelLarge!
-                                  .copyWith(
-                                  color: selectedFacility.contains(e.title)
-                                      ? Colors.white
-                                      : Colors.black),
-                            ),
+                  facilityList.isEmpty
+                      ? SizedBox(
+                          height: 40,
+                          child: Center(
+                            child: Text("Facility Not Avaiable"),
                           ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
+                        )
+                      : SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: facilityList.map((e) {
+                              return InkWell(
+                                onTap: () {
+                                  if (selectedFacility.contains(e.title)) {
+                                    setState(() {
+                                      selectedFacility.remove(e.title);
+                                    });
+                                  } else {
+                                    setState(() {
+                                      selectedFacility.add(e.title);
+                                    });
+                                  }
+                                },
+                                child: Container(
+                                  color: selectedFacility.contains(e.title)
+                                      ? colors.btn
+                                      : Colors.white,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 7),
+                                  margin: const EdgeInsets.only(right: 10),
+                                  child: Text(
+                                    e.title,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelLarge!
+                                        .copyWith(
+                                            color: selectedFacility
+                                                    .contains(e.title)
+                                                ? Colors.white
+                                                : Colors.black),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ),
                   const SizedBox(
                     height: 10,
                   ),
@@ -1008,9 +1006,8 @@ setState(() {
                   //   ),
                   // ),
 
-                  TextFormField(
+                  /*TextFormField(
                     onTap: () {
-
                       _selectDate(context);
                     },
                     readOnly: true,
@@ -1029,7 +1026,69 @@ setState(() {
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white)),
                     ),
-                  ),
+                  ),*/
+                  Container(height: 55, width: double.maxFinite,color: colors.whiteTemp,
+                    child:  Row(
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: selectedHoliday.isEmpty ?  InkWell(
+                            onTap: (){
+                              _selectDate(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text('Select Holiday Date',style: TextStyle(color: Colors.black87.withOpacity(0.6),fontSize: 16),),
+                            ),
+                          ):
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(children: List<Widget>.generate(selectedHoliday.length, (index) {
+                              return SizedBox(
+                                height: 50,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(right: 5),
+                                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: colors.secondary),
+                                      padding: const EdgeInsets.all(10),
+                                      child: Text(selectedHoliday[index]),),
+                                    Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: InkWell(
+                                          onTap: (){
+                                            print(index);
+                                            selectedHoliday.removeAt(index);
+                                            setState(() {
+
+                                            });
+                                          },
+                                          child: Container(
+
+                                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: colors.primary),
+                                              height: 15,
+                                              child: const Icon(Icons.remove,size: 15,)),
+                                        ))
+                                  ],),
+                              );
+                            }),),
+                          ),
+                        ),
+                        Expanded(
+                            flex: 1,
+                            child: InkWell(
+                              onTap: (){
+                                _selectDate(context);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: colors.secondary),
+                                padding: const EdgeInsets.all(10),
+                                child: const Center(child: Icon(Icons.add),),),
+                            ))
+                      ],
+                    ),),
                   SizedBox(
                     height: 10,
                   ),
@@ -1042,8 +1101,7 @@ setState(() {
                   ),
 
                   Container(
-                    decoration:
-                    const BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton2(
                         focusColor: colors.grad1Color,
@@ -1061,16 +1119,16 @@ setState(() {
                               style: TextStyle(color: Colors.black),
                             )),
                         // Not necessary for Option 1
-                        value: _selectedLocation,
+                        value: _selectedBall,
                         onChanged: (newValue) {
                           setState(() {
-                            _selectedLocation = newValue.toString();
-                            if (_selectedLocation == 'Tennis') {
+                            _selectedBall = newValue.toString();
+                            if (_selectedBall == 'Tennis') {
                               setState(() {
                                 selectballcontroller.text = 'tennis';
                                 print(selectballcontroller.text);
                               });
-                            } else if (_selectedLocation == 'Leather') {
+                            } else if (_selectedBall == 'Leather') {
                               setState(() {
                                 selectballcontroller.text = 'leather';
                                 print(selectballcontroller.text);
@@ -1078,7 +1136,7 @@ setState(() {
                             } else {
                               setState(() {
                                 selectballcontroller.text =
-                                'tennis/leather both';
+                                    'tennis/leather both';
                                 print(selectballcontroller.text);
                               });
                             }
@@ -1220,8 +1278,6 @@ setState(() {
                       loading: loading,
                       width: MediaQuery.of(context).size.width * 0.6,
                       onPressed: () {
-
-
                         // if (nameCon.text == "") {
                         //   Fluttertoast.showToast(
                         //     msg: "Please Enter Ground Name",
@@ -1309,43 +1365,33 @@ setState(() {
     );
   }
 
-  GetFacility?getFacility;
+  GetFacility? getFacility;
+
   Future<void> getfacility() async {
-
     var request = http.Request('GET', Uri.parse('${baseUrl}ground_facility'));
-
 
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-
-
       var result = await response.stream.bytesToString();
-      var finalresult=jsonDecode(result);
-      String msg =finalresult['message'];
-      bool error =finalresult['status'];
-      if(error){
-        getFacility=GetFacility.fromJson(finalresult);
-        
-        for(int i=0;i<getFacility!.data.length;i++){
-          facilityList.add(getFacility!.data[i]
+      var finalresult = jsonDecode(result);
+      String msg = finalresult['message'];
+      bool error = finalresult['status'];
+      if (error) {
+        getFacility = GetFacility.fromJson(finalresult);
 
-          );
-          setState(() {
-
-          });
+        for (int i = 0; i < getFacility!.data.length; i++) {
+          facilityList.add(getFacility!.data[i]);
+          setState(() {});
         }
 
-        setState(() {
-
-        });
+        setState(() {});
       }
-    }
-    else {
+    } else {
       print(response.reasonPhrase);
     }
-
   }
+
   DateTime selectedDate = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
@@ -1355,7 +1401,7 @@ setState(() {
       firstDate: DateTime.now(),
       lastDate: DateTime(2400),
     );
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
         var datetimeee = DateFormat('yyyy-MM-dd').format(selectedDate);
@@ -1364,23 +1410,19 @@ setState(() {
 
         selectedHoliday.add(datetimeee);
 
+        //holidaydate = selectedHoliday.join(', ');
 
-          holidaydate = selectedHoliday.join(', ');
-
-          holydaycontroller.text = holidaydate.toString();
-          print(holidaydate);
-
-      }
-
-        );
-
+       // holydaycontroller.text = holidaydate.toString();
+        print(holidaydate);
+      });
+    }
   }
 
   TextEditingController selectballcontroller = TextEditingController();
   TextEditingController nomberofballcontroller = TextEditingController();
   TextEditingController holydaycontroller = TextEditingController();
 
-  String? _selectedLocation;
+  String? _selectedBall;
   List<String> technician_typeList = [
     'Tennis',
     'Leather',
@@ -1388,28 +1430,28 @@ setState(() {
   ];
 
   var holidaydate;
-  String?locationLink;
+  String? locationLink;
 
-    void showPlacePicker() async {
-      LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              PlacePicker("AIzaSyDPsdTq-a4AHYHSNvQsdAlZgWvRu11T9pM")));
+  void showPlacePicker() async {
+    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            PlacePicker("AIzaSyDPsdTq-a4AHYHSNvQsdAlZgWvRu11T9pM")));
 
-      // Check if the user picked a place
-      if (result != null) {
-        setState(() {
-          addressCon.text = '${result.formattedAddress}';
-          print(addressCon.text);
+    // Check if the user picked a place
+    if (result != null) {
+      setState(() {
+        addressCon.text = '${result.formattedAddress}';
+        print(addressCon.text);
 
-          lat = "${result.latLng!.latitude}";
-          lang = "${result.latLng!.longitude}";
+        lat = "${result.latLng!.latitude}";
+        lang = "${result.latLng!.longitude}";
 
-          locationLink =
-          "https://www.google.com/maps/search/?api=1&query=$lat,$lang";
-        });
-      }
+        locationLink =
+            "https://www.google.com/maps/search/?api=1&query=$lat,$lang";
+      });
     }
+  }
 
-    var lat;
-    var lang;
+  var lat;
+  var lang;
 }

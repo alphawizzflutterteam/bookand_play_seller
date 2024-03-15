@@ -1,76 +1,80 @@
-
 class TimeslotModel {
-  bool status;
-  String message;
-  Data data;
+  bool? status;
+  String? message;
+  TimeSlotData? data;
 
-  TimeslotModel({
-    required this.status,
-    required this.message,
-    required this.data,
-  });
+  TimeslotModel({this.status, this.message, this.data});
 
-  factory TimeslotModel.fromJson(Map<String, dynamic> json) => TimeslotModel(
-    status: json["status"],
-    message: json["message"],
-    data: Data.fromJson(json["data"]),
-  );
+  TimeslotModel.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    message = json['message'];
+    data = json['data'] != null ? new TimeSlotData.fromJson(json['data']) : null;
+  }
 
-  Map<String, dynamic> toJson() => {
-    "status": status,
-    "message": message,
-    "data": data.toJson(),
-  };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['message'] = this.message;
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    return data;
+  }
 }
 
-class Data {
-  String groundId;
-  DateTime date;
-  List<Slot> slots;
+class TimeSlotData {
+  String? groundId;
+  String? date;
+  List<Slots>? slots;
 
-  Data({
-    required this.groundId,
-    required this.date,
-    required this.slots,
-  });
+  TimeSlotData({this.groundId, this.date, this.slots});
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-    groundId: json["ground_id"],
-    date: DateTime.parse(json["date"]),
-    slots: List<Slot>.from(json["slots"].map((x) => Slot.fromJson(x))),
-  );
+  TimeSlotData.fromJson(Map<String, dynamic> json) {
+    groundId = json['ground_id'];
+    date = json['date'];
+    if (json['slots'] != null) {
+      slots = <Slots>[];
+      json['slots'].forEach((v) {
+        slots!.add(new Slots.fromJson(v));
+      });
+    }
+  }
 
-  Map<String, dynamic> toJson() => {
-    "ground_id": groundId,
-    "date": "${date.year.toString().padLeft(4, '0')}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}",
-    "slots": List<dynamic>.from(slots.map((x) => x.toJson())),
-  };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['ground_id'] = this.groundId;
+    data['date'] = this.date;
+    if (this.slots != null) {
+      data['slots'] = this.slots!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }
 
-class Slot {
-  String time;
-  int isBooked;
-  int isOffer;
-  int price;
+class Slots {
+  String? fromTime;
+  String? toTime;
+  int? isBooked;
+  int? isOffer;
+  int? price;
 
-  Slot({
-    required this.time,
-    required this.isBooked,
-    required this.isOffer,
-    required this.price,
-  });
+  Slots({this.fromTime, this.toTime, this.isBooked, this.isOffer, this.price});
 
-  factory Slot.fromJson(Map<String, dynamic> json) => Slot(
-    time: json["time"],
-    isBooked: json["is_booked"],
-    isOffer: json["is_offer"],
-    price: json["price"],
-  );
+  Slots.fromJson(Map<String, dynamic> json) {
+    fromTime = json['from_time'];
+    toTime = json['to_time'];
+    isBooked = json['is_booked'];
+    isOffer = json['is_offer'];
+    price = json['price'];
+  }
 
-  Map<String, dynamic> toJson() => {
-    "time": time,
-    "is_booked": isBooked,
-    "is_offer": isOffer,
-    "price": price,
-  };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['from_time'] = this.fromTime;
+    data['to_time'] = this.toTime;
+    data['is_booked'] = this.isBooked;
+    data['is_offer'] = this.isOffer;
+    data['price'] = this.price;
+    return data;
+  }
 }

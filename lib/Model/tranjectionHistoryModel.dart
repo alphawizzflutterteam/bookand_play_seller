@@ -33,34 +33,34 @@ class TransactionHistory {
 }
 
 class Datum {
-  int id;
-  int userId;
-  int amount;
+  int? id;
+  int? userId;
+  int? amount;
   dynamic description;
-  String accountName;
-  String acountNumber;
-  String ifscCode;
-  int isApprove;
+  String? accountName;
+  String? acountNumber;
+  String? ifscCode;
+  int? isApprove;
   dynamic approvedBy;
   dynamic comment;
   dynamic approvedDate;
-  DateTime createdAt;
-  DateTime updatedAt;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   Datum({
-    required this.id,
-    required this.userId,
-    required this.amount,
-    required this.description,
-    required this.accountName,
-    required this.acountNumber,
-    required this.ifscCode,
-    required this.isApprove,
-    required this.approvedBy,
-    required this.comment,
-    required this.approvedDate,
-    required this.createdAt,
-    required this.updatedAt,
+     this.id,
+     this.userId,
+     this.amount,
+     this.description,
+     this.accountName,
+     this.acountNumber,
+     this.ifscCode,
+     this.isApprove,
+     this.approvedBy,
+     this.comment,
+     this.approvedDate,
+     this.createdAt,
+     this.updatedAt,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -91,7 +91,7 @@ class Datum {
     "approved_by": approvedBy,
     "comment": comment,
     "approved_date": approvedDate,
-    "created_at": createdAt.toIso8601String(),
-    "updated_at": updatedAt.toIso8601String(),
+    "created_at": createdAt!.toIso8601String(),
+    "updated_at": updatedAt!.toIso8601String(),
   };
 }

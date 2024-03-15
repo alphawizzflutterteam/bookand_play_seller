@@ -15,7 +15,8 @@ final Uri verifyOTPAPI = Uri.parse('${baseUrl}verifyotp');
 final Uri changePasswordAPI = Uri.parse('${baseUrl}change_password');
 final Uri getProfileApi = Uri.parse('${baseUrl}get_profile');
 final Uri updateProfileApi = Uri.parse('${baseUrl}update_profile');
-final Uri getTransactionApi = Uri.parse('${baseUrl}get_withdrawal_history');
+final Uri getWithdrawalHistoryApi = Uri.parse('${baseUrl}get_withdrawal_history');
+final Uri getTransactionHistoryApi = Uri.parse('${baseUrl}transaction_histroy');
 final Uri fetchProductByFillters = Uri.parse('${baseUrl}add_money');
 final Uri getCommunity = Uri.parse('${baseUrl}get_community');
 final Uri deleteCommunity = Uri.parse('${baseUrl}delete_community');
@@ -40,8 +41,8 @@ final Uri canclebookingstatus = Uri.parse('${baseUrl}cancel_booking_status_updat
 final Uri walletRequest = Uri.parse('${baseUrl}withdrawal_request');
 final Uri getPrivacyPolicyAPI = Uri.parse('${baseUrl}policies?slug=privacy_policy');
 final Uri supportAPI = Uri.parse('${baseUrl}policies?slug=support_us');
-final Uri getTermsAPI = Uri.parse('${baseUrl}policies?slug=terms_and_condition');
-final Uri getFAQApi = Uri.parse('${baseUrl}faqs');
+final Uri getTermsAPI = Uri.parse('${baseUrl}policies?slug=terms_and_condition2');
+final Uri getFAQApi = Uri.parse('${baseUrl}faqs?user_type=1');
 final Uri getCancleBookingOfflineApi = Uri.parse('${baseUrl}cancel_offline_booking');
 final Uri SearchbytimeSlotAPI = Uri.parse('${baseUrl}search_by_slot_availability');
 

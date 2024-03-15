@@ -1,21 +1,59 @@
 {
   "project_info": {
-    "project_number": "889344160744",
-    "project_id": "book-n-play-9db69",
-    "storage_bucket": "book-n-play-9db69.appspot.com"
+    "project_number": "309982814600",
+    "project_id": "booknplay-66e0f",
+    "storage_bucket": "booknplay-66e0f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:889344160744:android:a76db7e099815314476a5d",
+        "mobilesdk_app_id": "1:309982814600:android:726f81e0c937a0bf5b5a3d",
         "android_client_info": {
-          "package_name": "com.example.bookplayapp"
+          "package_name": "com.booknplayuser.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAQmlxD1Vw4Ved8Tf7ZB8OJkAfFCTZerew"
+          "current_key": "AIzaSyA9cnxYEFWDM3tlEQX9WHyM-iwAhpiEIH0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:309982814600:android:7ed2f0c206af4ab25b5a3d",
+        "android_client_info": {
+          "package_name": "com.bookplayseller.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9cnxYEFWDM3tlEQX9WHyM-iwAhpiEIH0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:309982814600:android:96f66aea6c18c6205b5a3d",
+        "android_client_info": {
+          "package_name": "com.example.booknplay"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9cnxYEFWDM3tlEQX9WHyM-iwAhpiEIH0"
         }
       ],
       "services": {

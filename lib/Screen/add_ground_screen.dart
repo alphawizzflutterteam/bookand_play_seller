@@ -44,7 +44,12 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
   bool network = false;
   List<Datum> facilityList = [];
 
-  String? _selectedLocation;
+  List<TextEditingController> fromTimeSlotControllerList = [];
+  List<TextEditingController> toTimeSlotControllerList = [];
+  List<String> fromTimeSlotList = [];
+  List<String> toTimeSlotList = [];
+
+  String? _selectedBall;
   List<String> technician_typeList = [
     'Tennis',
     'Leather',
@@ -54,9 +59,10 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
 
   // File ?file;
   List<CatModel> catList = [];
-  String catId = "";
+  CatModel? catId;
   List<String> selectedFacility = [];
   List<String> selectedHoliday = [];
+
   List<File> imageList = [];
   FocusNode passNode = FocusNode();
   ApiBaseHelper apiBaseHelper = ApiBaseHelper();
@@ -65,7 +71,7 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
   pickFile() async {
     final ImagePicker picker = ImagePicker();
 // Pick an image.
-    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 80,maxHeight: 400, maxWidth: 400);
     if (image != null) {
       setState(() {
         File file = File(image.path);
@@ -125,7 +131,7 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
       try {
         Map<String, String> param = {
           "address_link": '${locationLink.toString()}',
-          "holiday": holidaydate.toString(),
+          "holiday": selectedHoliday.join(','),
           "ball_type": selectballcontroller.text,
           "ball_given": nomberofballcontroller.text,
           "title": nameCon.text,
@@ -135,9 +141,22 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
           "facilities": selectedFacility.join(","),
           "description": descCon.text,
           "default_price": priceCon.text,
-          "category_id": catId.toString(),
+          "category_id": catId?.id.toString() ?? '',
           "vendor_id": App.localStorage.getString("userId").toString(),
+         /* "from_time[]":fromTimeSlotList.toString(),
+          "to_time[]": toTimeSlotList.toString()*/
         };
+
+        List<Map<String, String>> guestsList = [];
+        for (int i = 0; i < fromTimeSlotList.length; i++) {
+          Map<String, String> guestData = {
+            'from_time[$i]': fromTimeSlotList[i].toString(),
+            'to_time[$i]': toTimeSlotList[i].toString(),
+          };
+          guestsList.add(guestData);
+        }
+        var data = addMapListToData(param, guestsList);
+
         var request = http.MultipartRequest(
           'POST',
           Uri.parse("${baseUrl}ground_create"),
@@ -165,7 +184,7 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
           }
         }
         request.headers.addAll(headers);
-        request.fields.addAll(param);
+        request.fields.addAll(data);
         print(request.fields.toString());
         print("request: " + request.toString());
         var res = await request.send();
@@ -209,6 +228,10 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    fromTimeSlotControllerList.add(TextEditingController());
+    toTimeSlotControllerList.add(TextEditingController());
+    fromTimeSlotList.add('');
+    toTimeSlotList.add('');
     getCategory();
     getfacility();
   }
@@ -354,8 +377,6 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
                     keyboardType: TextInputType.visiblePassword,
                     readOnly: true,
                     onTap: () async {
-
-
                       TimeOfDay? picked = await selectTime(context);
                       if (picked != null) {
                         DateTime dateTime = DateTime(
@@ -419,6 +440,151 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
                     height: 10,
                   ),
                   Text(
+                    "Time Slot",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: colors.blackTemp)),
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: fromTimeSlotControllerList.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: TextFormField(
+                                      controller:
+                                          fromTimeSlotControllerList[index],
+                                      keyboardType: TextInputType.visiblePassword,
+                                      readOnly: true,
+                                      onTap: () async {
+                                        TimeOfDay? picked =
+                                            await selectTime(context);
+                                        if (picked != null) {
+                                          DateTime dateTime = DateTime(2020, 10,
+                                              10, picked!.hour, picked!.minute);
+                                          setState(() {
+                                            fromTimeSlotControllerList[index]
+                                                    .text =
+                                                "${DateFormat("HH").format(dateTime)}:00";
+                                            fromTimeSlotList[index] =
+                                                fromTimeSlotControllerList[index]
+                                                    .text;
+                                            print(openTimeCon.text);
+                                          });
+                                        }
+                                      },
+                                      textInputAction: TextInputAction.next,
+                                      decoration: const InputDecoration(
+                                        hintText: "From:",
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.white)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.white)),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: TextFormField(
+                                      controller: toTimeSlotControllerList[index],
+                                      keyboardType: TextInputType.visiblePassword,
+                                      readOnly: true,
+                                      onTap: () async {
+                                        TimeOfDay? picked =
+                                            await selectTime(context);
+                                        if (picked != null) {
+                                          DateTime dateTime = DateTime(2020, 10,
+                                              10, picked!.hour, picked!.minute);
+                                          setState(() {
+                                            toTimeSlotControllerList[index].text =
+                                                "${DateFormat("HH").format(dateTime)}:00";
+                                            toTimeSlotList[index] =
+                                                toTimeSlotControllerList[index]
+                                                    .text;
+                                            print(closeTimeCon.text);
+                                          });
+                                        }
+                                      },
+                                      textInputAction: TextInputAction.next,
+                                      decoration: const InputDecoration(
+                                        hintText: "To:",
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                        enabledBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.white)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: Colors.white)),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                      flex: 1,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          fromTimeSlotControllerList
+                                              .removeAt(index);
+                                          toTimeSlotControllerList
+                                              .removeAt(index);
+                                          toTimeSlotList.removeAt(index);
+                                          fromTimeSlotList.removeAt(index);
+                                          setState(() {});
+                                        },
+                                        icon: const Icon(Icons.delete,color: colors.primary,),
+                                      ))
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: colors.secondary,
+                                fixedSize: const Size(90, 30),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10))),
+                            onPressed: () {
+                              fromTimeSlotControllerList
+                                  .add(TextEditingController());
+                              toTimeSlotControllerList
+                                  .add(TextEditingController());
+                              toTimeSlotList.add('');
+                              fromTimeSlotList.add('');
+                              setState(() {});
+                            },
+                            child: const Text('Add More'),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Text(
                     "Category",
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
@@ -429,8 +595,8 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
                   catList.isEmpty
                       ? Container(
                           height: 50,
-                          child: Center(
-                            child: Text('Categorys Not Avaiable'),
+                          child: const Center(
+                            child: Text('Category Not Available'),
                           ),
                         )
                       : SingleChildScrollView(
@@ -440,11 +606,11 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
                               return InkWell(
                                 onTap: () {
                                   setState(() {
-                                    catId = e.id.toString();
+                                    catId = e;
                                   });
                                 },
                                 child: Container(
-                                  color: catId == e.id.toString()
+                                  color: catId?.id.toString() == e.id.toString()
                                       ? colors.btn
                                       : Colors.white,
                                   padding: const EdgeInsets.symmetric(
@@ -456,7 +622,7 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
                                         .textTheme
                                         .labelLarge!
                                         .copyWith(
-                                            color: catId == e.id.toString()
+                                            color: catId?.id.toString() == e.id.toString()
                                                 ? Colors.white
                                                 : Colors.black),
                                   ),
@@ -518,7 +684,7 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
                   facilityList.isEmpty
                       ? Container(
                           height: 50,
-                          child: Center(
+                          child: const Center(
                             child: Text('Facility Not Avaiable'),
                           ),
                         )
@@ -612,7 +778,7 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
                   //   ),
                   // ),
                   //
-                  TextFormField(
+                  /*TextFormField(
                     onTap: () {
                       _selectDate(context);
                     },
@@ -632,74 +798,140 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
                       focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white)),
                     ),
-                  ),
-                  SizedBox(
+                  ),*/
+                  const SizedBox(height: 5,),
+                  Container(height: 55, width: double.maxFinite,color: colors.whiteTemp,
+                    child:  Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: selectedHoliday.isEmpty ?  InkWell(
+                          onTap: (){
+                            _selectDate(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text('Select Holiday Date',style: TextStyle(color: Colors.black87.withOpacity(0.6),fontSize: 16),),
+                          ),
+                        ):
+                        SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(children: List<Widget>.generate(selectedHoliday.length, (index) {
+                            return SizedBox(
+                                height: 50,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                Container(
+                                  margin: const EdgeInsets.only(right: 5),
+                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: colors.secondary),
+                                  padding: const EdgeInsets.all(10),
+                                  child: Text(selectedHoliday[index]),),
+                                 Positioned(
+                                  right: 0,
+                                    top: 0,
+                                    child: InkWell(
+                                      onTap: (){
+                                        print(index);
+                                        selectedHoliday.removeAt(index);
+                                        setState(() {
+
+                                        });
+                                      },
+                                      child: Container(
+
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: colors.primary),
+                                        height: 15,
+                                          child: const Icon(Icons.remove,size: 15,)),
+                                    ))
+                              ],),
+                            );
+                          }),),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 1,
+                          child: InkWell(
+                            onTap: (){
+                              _selectDate(context);
+                            },
+                            child: Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: colors.secondary),
+                        padding: const EdgeInsets.all(10),
+                        child: const Center(child: Icon(Icons.add),),),
+                          ))
+                    ],
+                  ),),
+                  const SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    "Type Of Ball",
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
+                  catId?.title?.toLowerCase() == 'cricket' ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                     Text(
+                      "Type Of Ball",
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ) ,
+                    const SizedBox(
+                      height: 5,
+                    ),
 
-                  Container(
-                    decoration:
-                        const BoxDecoration(color: Colors.white),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton2(
-                        focusColor: colors.grad1Color,
-                        dropdownDecoration: BoxDecoration(
-                            border: Border.all(color: colors.blackTemp)),
+                    Container(
+                      decoration: const BoxDecoration(color: Colors.white),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton2(
+                          focusColor: colors.grad1Color,
+                          dropdownDecoration: BoxDecoration(
+                              border: Border.all(color: colors.blackTemp)),
 
-                        isExpanded: true,
+                          isExpanded: true,
 
-                        hint: SizedBox(
-                            width: MediaQuery.of(context).size.width / 2.1,
-                            child: Text(
-                              'Select Ball Type',
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: TextStyle(color: Colors.black),
-                            )),
-                        // Not necessary for Option 1
-                        value: _selectedLocation,
-                        onChanged: (newValue) {
-                          setState(() {
-                            _selectedLocation = newValue.toString();
-                            if (_selectedLocation == 'Tennis') {
-                              setState(() {
-                                selectballcontroller.text = 'tennis';
-                                print(selectballcontroller.text);
-                              });
-                            } else if (_selectedLocation == 'Leather') {
-                              setState(() {
-                                selectballcontroller.text = 'leather';
-                                print(selectballcontroller.text);
-                              });
-                            } else {
-                              setState(() {
-                                selectballcontroller.text =
-                                    'tennis/leather both';
-                                print(selectballcontroller.text);
-                              });
-                            }
-                          });
-                        },
-                        items: technician_typeList.map((location) {
-                          return DropdownMenuItem(
-                            child: new Text(location),
-                            value: location,
-                          );
-                        }).toList(),
+                          hint: SizedBox(
+                              width: MediaQuery.of(context).size.width / 2.1,
+                              child: const Text(
+                                'Select Ball Type',
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: TextStyle(color: Colors.black),
+                              )),
+                          // Not necessary for Option 1
+                          value: _selectedBall,
+                          onChanged: (newValue) {
+                            setState(() {
+                              _selectedBall = newValue.toString();
+                              if (_selectedBall == 'Tennis') {
+                                setState(() {
+                                  selectballcontroller.text = 'tennis';
+                                  print(selectballcontroller.text);
+                                });
+                              } else if (_selectedBall == 'Leather') {
+                                setState(() {
+                                  selectballcontroller.text = 'leather';
+                                  print(selectballcontroller.text);
+                                });
+                              } else {
+                                setState(() {
+                                  selectballcontroller.text =
+                                  'tennis/leather both';
+                                  print(selectballcontroller.text);
+                                });
+                              }
+                            });
+                          },
+                          items: technician_typeList.map((location) {
+                            return DropdownMenuItem(
+                              value: location,
+                              child:  Text(location),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
-                  ),
 
-                  SizedBox(
-                    height: 10,
-                  ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],) : SizedBox(),
                   Text(
                     "Number Of Ball",
                     style: Theme.of(context).textTheme.bodyLarge,
@@ -865,7 +1097,7 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
                           );
                           return;
                         }
-                        if (catId == "") {
+                        if (catId == null) {
                           Fluttertoast.showToast(
                             msg: "Please Select Category",
                           );
@@ -877,13 +1109,13 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
                           );
                           return;
                         }
-                        if (holydaycontroller.text.isEmpty) {
+                        /*if (holydaycontroller.text.isEmpty) {
                           Fluttertoast.showToast(
                             msg: "Please Select Holiday Date",
                           );
                           return;
-                        }
-                        if (selectballcontroller.text.isEmpty) {
+                        }*/
+                        if (catId?.title == 'cricket' && selectballcontroller.text.isEmpty) {
                           Fluttertoast.showToast(
                             msg: "Please Select Ball Type",
                           );
@@ -908,11 +1140,27 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
                           );
                           return;
                         }
+                            bool isEmpty = false ;
+                        for(int i = 0; i<toTimeSlotList.length; i++){
+                          if (toTimeSlotList[i] == "" || fromTimeSlotList[i] == '') {
+                            Fluttertoast.showToast(
+                              msg: "Please fill the empty time slot",
+                            );
+                            isEmpty = true ;
+                            return;
+                          }
+
+                        }
 
                         setState(() {
                           loading = true;
                         });
-                        addGroundApi();
+                        if(!isEmpty){
+                          addGroundApi();
+                        }
+
+
+
                         //changePassword("");
                       },
                       title: "Submit",
@@ -931,8 +1179,7 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
   GetFacility? getFacility;
 
   Future<void> getfacility() async {
-    var request = http.Request('GET',
-        Uri.parse('${baseUrl}ground_facility'));
+    var request = http.Request('GET', Uri.parse('${baseUrl}ground_facility'));
 
     http.StreamedResponse response = await request.send();
 
@@ -956,6 +1203,7 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
     }
   }
 
+
   DateTime selectedDate = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
@@ -965,26 +1213,24 @@ class _AddGroundScreenState extends State<AddGroundScreen> {
       firstDate: DateTime.now(),
       lastDate: DateTime(2400),
     );
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
-        var datetimeee = DateFormat('yyyy-MM-dd').format(selectedDate);
-
-        print("==================${datetimeee}");
+        String datetimeee = DateFormat('yyyy-MM-dd').format(selectedDate);
 
         selectedHoliday.add(datetimeee);
 
-        holidaydate = selectedHoliday.join(', ');
+      //  holidaydate = selectedHoliday.join(', ');
 
-        holydaycontroller.text = holidaydate.toString();
-        print(holidaydate);
+        //holydaycontroller.text = holidaydate.toString();
       });
+    }
   }
 
   void showPlacePicker() async {
     LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) =>
-            PlacePicker("AIzaSyDPsdTq-a4AHYHSNvQsdAlZgWvRu11T9pM")));
+            PlacePicker("AIzaSyDs0Y8pl74wsfvzapoo3JPmTnnun-_Pz3s")));
 
     // Check if the user picked a place
     if (result != null) {

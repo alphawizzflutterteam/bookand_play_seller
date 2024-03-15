@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:bookplayapp/Helper/color.dart';
 import 'package:bookplayapp/Services/api_services/apiConstants.dart';
@@ -61,57 +62,63 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 25, right: 25),
                     child: Column(children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
-                      Text("Available Balance",
+                      const Text("Available Balance",
                           style: TextStyle(
                               fontSize: 25, fontWeight: FontWeight.w400)),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Text("\u{20B9} ${walletbalanco ?? "0"}",
-                          style: TextStyle(fontSize: 25,color: Colors.green)),
-                      SizedBox(
+                          style: const TextStyle(
+                              fontSize: 25, color: Colors.green)),
+                      const SizedBox(
                         height: 10,
                       ),
 
-                      Text( "Commission  Deductions",
+                      /*const Text( "Commission  Deductions",
                           style: TextStyle(
                               fontSize: 25, fontWeight: FontWeight.w400,),),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Text("\u{20B9} ${commitionDituction?? "0"}",
-                          style: TextStyle(fontSize: 25,color: Colors.red)),
-                      SizedBox(height: 10,),
+                          style: const TextStyle(fontSize: 25,color: Colors.red)),
+                      const SizedBox(height: 10,),
 
 
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
-                      ),
+                      ),*/
 
-                      Text( "Withdraw Balance",
+                      const Text(
+                        "Withdraw Balance",
                         style: TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.w400,),),
-                      SizedBox(
+                          fontSize: 25,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SizedBox(
                         height: 10,
                       ),
-
-                      amountcontroller.text.isEmpty?
-                      Text("\u{20B9} 0",
-                          style: TextStyle(fontSize: 25,color: Colors.green)):
-                      Text("\u{20B9} ${amountcontroller.text.toString()}",
-                          style: TextStyle(fontSize: 25,color: Colors.green)),
-                      SizedBox(height: 10,),
+                      amountcontroller.text.isEmpty
+                          ? const Text("\u{20B9} 0",
+                              style:
+                                  TextStyle(fontSize: 25, color: Colors.green))
+                          : Text("\u{20B9} ${amountcontroller.text.toString()}",
+                              style: const TextStyle(
+                                  fontSize: 25, color: Colors.green)),
+                      const SizedBox(
+                        height: 10,
+                      ),
                       SizedBox(
                         height: 50,
                         width: double.maxFinite,
                         child: ElevatedButton(
                           onPressed: () {
-                            setState(() {
-
-                            });
+                            setState(() {});
                             showAlertDialog(context);
                           },
                           style: ElevatedButton.styleFrom(
@@ -120,9 +127,9 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
                               )),
-                          child: Text(
+                          child: const Text(
                             "Withdraw Balance",
-                            style: const TextStyle(
+                            style: TextStyle(
                               //decoration: TextDecoration.underline,
                               color: colors.whiteTemp,
                               fontSize: 15,
@@ -130,70 +137,90 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
-                      Row(
+                      const Row(
                         children: [
                           Text("Transaction", style: TextStyle(fontSize: 20)),
                         ],
                       ),
-                      !loading?SizedBox(
-                        height: MediaQuery.of(context).size.height/3.5,
-                        child:
-
-                        walletHistory?.data.isEmpty ?? true
-                            ? Container(
-                          height: MediaQuery.of(context).size.height/4,
-
-                          child: Center(
-                                  child: Text('History Not Available'),
-                                ),
-                            )
-                            :
-
-                        ListView.builder(
-                                itemCount:
-                                walletHistory?.data.length ?? 0,
-                                itemBuilder: (context, index) {
-                                  return Card(
-                                    child: Container(
-
-                                      height: 80,
-
-
-                                      child: Row(children: [
-                                        SizedBox(width: 15,),
-                                       Container(height: 30,width: 30,
-                                       decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),
-                                       color: colors.secondary
-                                       ),
-                                         child: Icon(Icons.monetization_on_rounded,color: colors.whiteTemp,size: 15,)
-                                       ),
-                                        SizedBox(width: 15,),
-                                        Column(
-
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-
-                                          Text("${walletHistory?.data[index].id}", style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold)),
-                                          Text("${walletHistory?.data[index].createdAt}", style: TextStyle(fontSize: 10)),
-
-                                        ],),
-
-                                        Spacer(),
-
-                                        Text("RS ${walletHistory?.data[index].amount}", style: TextStyle(fontSize: 15,)),
-
-                                        SizedBox(width: 10,),
-
-                                      ]),
+                      !loading
+                          ? SizedBox(
+                              height: MediaQuery.of(context).size.height / 3.5,
+                              child: walletHistory?.data.isEmpty ?? true
+                                  ? Container(
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              4,
+                                      child: const Center(
+                                        child: Text('History Not Available'),
+                                      ),
+                                    )
+                                  : ListView.builder(
+                                      itemCount:
+                                          walletHistory?.data.length ?? 0,
+                                      itemBuilder: (context, index) {
+                                        return Card(
+                                          child: Container(
+                                            height: 80,
+                                            child: Row(children: [
+                                              const SizedBox(
+                                                width: 15,
+                                              ),
+                                              Container(
+                                                  height: 30,
+                                                  width: 30,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                      color: colors.secondary),
+                                                  child: const Icon(
+                                                    Icons
+                                                        .monetization_on_rounded,
+                                                    color: colors.whiteTemp,
+                                                    size: 15,
+                                                  )),
+                                              const SizedBox(
+                                                width: 15,
+                                              ),
+                                              Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                      "${walletHistory?.data[index].id}",
+                                                      style: const TextStyle(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold)),
+                                                  Text(
+                                                      "${walletHistory?.data[index].createdAt}",
+                                                      style: const TextStyle(
+                                                          fontSize: 10)),
+                                                ],
+                                              ),
+                                              const Spacer(),
+                                              Text(
+                                                  "RS ${walletHistory?.data[index].amount}",
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                  )),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                            ]),
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
-                      ):const Center(child: CircularProgressIndicator(),),
+                            )
+                          : const Center(
+                              child: CircularProgressIndicator(),
+                            ),
                     ]),
                   ),
                 ),
@@ -207,50 +234,47 @@ class _Wallet_ScreenState extends State<Wallet_Screen> {
 
   TransactionHistory? walletHistory;
   bool loading = true;
+
   Future<void> getBalance() async {
     var userId;
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    userId =  preferences.getString('userId');
-
+    userId = preferences.getString('userId');
 
     var param = {
       'vendor_id': userId.toString(),
-
     };
+    print('_______${param}');
     setState(() {
       loading = true;
     });
 
-    apiBaseHelper.postAPICall(getTransactionApi, param).then((getData) {
+    apiBaseHelper.postAPICall(getWithdrawalHistoryApi, param).then((getData) {
       bool error = getData['status'];
       String msg = getData['message'];
+
+      log('${getData}');
       setState(() {
         loading = false;
       });
       if (error) {
-
-//Fluttertoast.showToast(msg: msg);
+        //Fluttertoast.showToast(msg: msg);
         walletHistory = TransactionHistory.fromJson(getData);
-        setState(() {
-
-        });
-      } else {
-      }
+        setState(() {});
+      } else {}
     });
   }
 
-var walletbalanco;
+  var walletbalanco;
   var commitionDituction;
   var widrawalamount;
+
   Future<void> getwallet() async {
     var userId;
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    userId =  preferences.getString('userId');
-
+    userId = preferences.getString('userId');
 
     var param = {
       'vendor_id': userId.toString(),
-
     };
     setState(() {
       loading = true;
@@ -264,41 +288,40 @@ var walletbalanco;
         loading = false;
       });
       if (error) {
-
-setState(() {
-  walletbalanco=getData['data']['wallet'];
-  commitionDituction=getData['data']['commission_detuction'];
-  amountcontroller.text=getData['data']['withdrawal_amount'].toString();
-});
-      } else {
-      }
+        setState(() {
+          walletbalanco = getData['data']['wallet'];
+          commitionDituction = getData['data']['commission_detuction'];
+          amountcontroller.text =
+              getData['data']['withdrawal_amount'].toString();
+        });
+      } else {}
     });
   }
-  showAlertDialog(
-    BuildContext context) {
+
+  showAlertDialog(BuildContext context) {
     // set up the button
 
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
         content: Container(
       width: 200,
-      height: MediaQuery.of(context).size.height/1.4,
+      height: MediaQuery.of(context).size.height / 1.4,
       child: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Text(
+              const Text(
                 "Send Withdraw Request",
                 style: TextStyle(
                     color: colors.secondary,
                     fontSize: 15,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              Row(
+              /*const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -310,29 +333,29 @@ setState(() {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "\u{20B9} ${widrawalamount??'0'}/-",
-                    style: TextStyle(
+                    "\u{20B9} ${widrawalamount ?? '0'}/-",
+                    style: const TextStyle(
                         color: colors.secondary,
                         fontSize: 15,
                         fontWeight: FontWeight.bold),
                   ),
                 ],
-              ),
-              Divider(
+              ),*/
+              const Divider(
                 thickness: 3,
                 color: Colors.black,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -344,10 +367,10 @@ setState(() {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 3,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -363,7 +386,6 @@ setState(() {
                 // readOnly: true,
                 controller: amountcontroller,
                 decoration: InputDecoration(
-
                   prefixIcon: const Icon(
                     Icons.currency_rupee,
                     color: colors.secondary,
@@ -373,15 +395,15 @@ setState(() {
                   focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide:
-                      const BorderSide(color: colors.black12, width: 2)),
+                          const BorderSide(color: colors.black12, width: 2)),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide:
-                      const BorderSide(color: colors.black12, width: 2)),
+                          const BorderSide(color: colors.black12, width: 2)),
                   errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide:
-                      const BorderSide(color: colors.black12, width: 2)),
+                          const BorderSide(color: colors.black12, width: 2)),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
@@ -396,12 +418,10 @@ setState(() {
                   return null; // Return null if the input is valid
                 },
               ),
-
-
-              SizedBox(
+              const SizedBox(
                 height: 3,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -416,7 +436,6 @@ setState(() {
               TextFormField(
                 controller: accountnamecontroller,
                 decoration: InputDecoration(
-
                   prefixIcon: const Icon(
                     Icons.person,
                     color: colors.secondary,
@@ -426,15 +445,15 @@ setState(() {
                   focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide:
-                      const BorderSide(color: colors.black12, width: 2)),
+                          const BorderSide(color: colors.black12, width: 2)),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide:
-                      const BorderSide(color: colors.black12, width: 2)),
+                          const BorderSide(color: colors.black12, width: 2)),
                   errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide:
-                      const BorderSide(color: colors.black12, width: 2)),
+                          const BorderSide(color: colors.black12, width: 2)),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
@@ -449,14 +468,10 @@ setState(() {
                   return null; // Return null if the input is valid
                 },
               ),
-
-
-              SizedBox(
+              const SizedBox(
                 height: 3,
               ),
-
-
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -472,26 +487,24 @@ setState(() {
                 keyboardType: TextInputType.number,
                 controller: accountnumbercontroller,
                 decoration: InputDecoration(
-
                   prefixIcon: const Icon(
                     Icons.numbers,
                     color: colors.secondary,
                   ),
-
                   hintText: 'Enter Account No',
                   contentPadding: const EdgeInsets.symmetric(vertical: 5),
                   focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide:
-                      const BorderSide(color: colors.black12, width: 2)),
+                          const BorderSide(color: colors.black12, width: 2)),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide:
-                      const BorderSide(color: colors.black12, width: 2)),
+                          const BorderSide(color: colors.black12, width: 2)),
                   errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide:
-                      const BorderSide(color: colors.black12, width: 2)),
+                          const BorderSide(color: colors.black12, width: 2)),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
@@ -506,12 +519,10 @@ setState(() {
                   return null; // Return null if the input is valid
                 },
               ),
-
-
-              SizedBox(
+              const SizedBox(
                 height: 3,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -528,7 +539,6 @@ setState(() {
                 textCapitalization: TextCapitalization.characters,
                 controller: ifsccontroller,
                 decoration: InputDecoration(
-
                   prefixIcon: const Icon(
                     Icons.food_bank,
                     color: colors.secondary,
@@ -539,15 +549,15 @@ setState(() {
                   focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide:
-                      const BorderSide(color: colors.black12, width: 2)),
+                          const BorderSide(color: colors.black12, width: 2)),
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide:
-                      const BorderSide(color: colors.black12, width: 2)),
+                          const BorderSide(color: colors.black12, width: 2)),
                   errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25),
                       borderSide:
-                      const BorderSide(color: colors.black12, width: 2)),
+                          const BorderSide(color: colors.black12, width: 2)),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(25),
                   ),
@@ -560,31 +570,27 @@ setState(() {
                   //   return 'Please enter valid Email';
                   // }
 
-                  else if (value.length<11) {
+                  else if (value.length < 11) {
                     return 'Please enter valid IFSC Code';
                   }
                   return null; // Return null if the input is valid
                 },
               ),
-
-
-              SizedBox(
+              const SizedBox(
                 height: 3,
               ),
-              Divider(
+              const Divider(
                 thickness: 3,
                 color: Colors.black,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-
                   InkWell(
                     onTap: () {
-
                       Navigator.pop(context);
                     },
                     child: Container(
@@ -595,23 +601,18 @@ setState(() {
                             40,
                           ),
                           color: colors.secondary),
-                      child: Center(
+                      child: const Center(
                           child: Text(
                         'Cancel',
                         style: TextStyle(color: colors.whiteTemp),
                       )),
                     ),
                   ),
-
-
                   InkWell(
                     onTap: () {
-if(_formKey.currentState!.validate()) {
-
-  sendwidrrawalrequest();
-
-
-}
+                      if (_formKey.currentState!.validate()) {
+                        sendwidrrawalrequest();
+                      }
                     },
                     child: Container(
                       width: 80,
@@ -621,7 +622,7 @@ if(_formKey.currentState!.validate()) {
                             40,
                           ),
                           color: colors.secondary),
-                      child: Center(
+                      child: const Center(
                           child: Text(
                         'Send',
                         style: TextStyle(color: colors.whiteTemp),
@@ -630,7 +631,7 @@ if(_formKey.currentState!.validate()) {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
             ],
@@ -648,72 +649,58 @@ if(_formKey.currentState!.validate()) {
     );
   }
 
- Future<void> sendwidrrawalrequest() async {
-   var userId;
-   SharedPreferences preferences = await SharedPreferences.getInstance();
-   userId =  preferences.getString('userId');
+  Future<void> sendwidrrawalrequest() async {
+    var userId;
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    userId = preferences.getString('userId');
 
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('${baseUrl}withdrawal_request'));
+    // var request = http.MultipartRequest(
+    //     'POST', Uri.parse('${baseUrl}walletRequest'));
+    request.fields.addAll({
+      'vendor_id': '${userId.toString()}',
+      'amount': '${amountcontroller.text.toString()}',
+      'ifsc_code': '${ifsccontroller.text.toString()}',
+      'account_name': '${accountnamecontroller.text.toString()}',
+      'account_number': '${accountnumbercontroller.text.toString()}',
+    });
 
-    var request = http.MultipartRequest('POST', Uri.parse('${baseUrl}withdrawal_request'));
-   // var request = http.MultipartRequest(
-   //     'POST', Uri.parse('${baseUrl}walletRequest'));
-   request.fields.addAll({
-     'vendor_id':'${userId.toString()}',
-     'amount':'${amountcontroller.text.toString()}',
-     'ifsc_code':'${ifsccontroller.text.toString()}',
-     'account_name':'${accountnamecontroller.text.toString()}',
-     'account_number':'${accountnumbercontroller.text.toString()}',
+    print(request.url);
+    print(request.fields);
+    http.StreamedResponse response = await request.send();
+    if (response.statusCode == 200) {
+      var result = await response.stream.bytesToString();
+      var finalresult = jsonDecode(result);
+      bool error = finalresult['status'];
+      String msg = finalresult['message'];
 
+      setState(() {});
 
-   });
-
-   print(request.url);
-   print(request.fields);
-   http.StreamedResponse response = await request.send();
-   if (response.statusCode == 200) {
-     var result = await response.stream.bytesToString();
-     var finalresult = jsonDecode(result);
-     bool error = finalresult['status'];
-     String msg = finalresult['message'];
-
-     setState(() {
-
-     });
-
-     if (error) {
-
-       Fluttertoast.showToast(msg: msg);
+      if (error) {
+        Fluttertoast.showToast(msg: msg);
         Navigator.pop(context);
 
         accountnamecontroller.clear();
-   accountnumbercontroller.clear();
-   ifsccontroller.clear();
-   amountcontroller.clear();
-     } else {
-
-       Fluttertoast.showToast(msg: msg);
+        accountnumbercontroller.clear();
+        ifsccontroller.clear();
+        amountcontroller.clear();
+      } else {
+        Fluttertoast.showToast(msg: msg);
         Navigator.pop(context);
-       accountnamecontroller.clear();
-       accountnumbercontroller.clear();
-       ifsccontroller.clear();
-       amountcontroller.clear();
-     }
-   }
-   else {
+        accountnamecontroller.clear();
+        accountnumbercontroller.clear();
+        ifsccontroller.clear();
+        amountcontroller.clear();
+      }
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
 
-     print(response.reasonPhrase);
-   }
- }
-
-
-
-
- TextEditingController amountcontroller=TextEditingController();
- TextEditingController ifsccontroller=TextEditingController();
- TextEditingController accountnamecontroller=TextEditingController();
- TextEditingController accountnumbercontroller=TextEditingController();
+  TextEditingController amountcontroller = TextEditingController();
+  TextEditingController ifsccontroller = TextEditingController();
+  TextEditingController accountnamecontroller = TextEditingController();
+  TextEditingController accountnumbercontroller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-
- }
-
-
+}

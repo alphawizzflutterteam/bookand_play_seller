@@ -110,7 +110,7 @@ class _CancleBookingScreenState extends State<CancleBookingScreen> {
                                                   // image: DecorationImage(
                                                   //     image: AssetImage('assets/images/Group 75122.png')),
                                                     borderRadius:
-                                                    BorderRadius.circular(30)),
+                                                    BorderRadius.circular(8)),
                                                 child: const Image(
                                                     image: AssetImage(
                                                         'assets/images/Group 75122.png'),

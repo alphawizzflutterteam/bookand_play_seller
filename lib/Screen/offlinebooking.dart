@@ -102,14 +102,13 @@ class _OfflineBookingState extends State<OfflineBooking> {
                                             Expanded(
                                               child: Container(
                                                 decoration: BoxDecoration(
-                                                  // image: DecorationImage(
-                                                  //     image: AssetImage('assets/images/Group 75122.png')),
-                                                    borderRadius:
-                                                    BorderRadius.circular(30)),
-                                                child: const Image(
-                                                    image: AssetImage(
-                                                        'assets/images/Group 75122.png'),
-                                                    fit: BoxFit.fill),
+                                                    image: DecorationImage(
+                                                        image: NetworkImage('${OfflineBooking?.data[index].imgGround}'),fit: BoxFit.fill),
+                                                    borderRadius: BorderRadius.circular(8)),
+                                                // child: const Image(
+                                                //     image: AssetImage(
+                                                //         'assets/images/Group 75122.png'),
+                                                //     fit: BoxFit.fill),
                                               ),
                                             ),
                                           ],

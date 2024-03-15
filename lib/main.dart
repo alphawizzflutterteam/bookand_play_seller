@@ -9,11 +9,16 @@ import 'AuthView/splashScreen.dart';
 import 'Screen/notificationScreen.dart';
 import 'Screen/paymentHistory_scr.dart';
 import 'Screen/wallet_screen.dart';
+import 'firebase_notification.dart';
 
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  LocalNotificationService.initialize();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
 
   try{
     String? token = await FirebaseMessaging.instance.getToken();
@@ -29,11 +34,7 @@ Future<void> main() async {
     sound: true,
 
   );
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
 
-  ]);
 
   runApp(const MyApp());
 }
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Book And Playapp Vendor',
+      title: 'Book And Play Vendor',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
