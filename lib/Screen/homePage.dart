@@ -962,8 +962,7 @@ Navigator.pop(context);
                             children: [
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    primary:
-                                    Colors.blue),
+                                    backgroundColor: Colors.blue),
                                 child: const Text("Back"),
                                 onPressed: () async {
                                   Navigator.pop(context);
@@ -971,8 +970,7 @@ Navigator.pop(context);
                               ),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    primary:
-                                    Colors.blue),
+                                    backgroundColor: Colors.blue),
                                 child: const Text("Search"),
                                 onPressed: () {
                                   if (formKey.currentState!

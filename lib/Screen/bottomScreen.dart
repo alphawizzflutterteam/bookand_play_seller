@@ -212,14 +212,14 @@ var userId;
     content: Text("Are you sure you want to exit?"),
     actions: <Widget>[
     ElevatedButton(
-    style: ElevatedButton.styleFrom(primary: colors.secondary),
+    style: ElevatedButton.styleFrom(backgroundColor: colors.secondary),
     child: Text("YES"),
     onPressed: () {
     SystemNavigator.pop();
     },
     ),
     ElevatedButton(
-    style: ElevatedButton.styleFrom(primary: colors.secondary),
+    style: ElevatedButton.styleFrom(backgroundColor: colors.secondary),
     child: Text("NO"),
     onPressed: () {
     Navigator.of(context).pop();
@@ -367,7 +367,7 @@ var userId;
                                   actions: <Widget>[
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                          primary: colors.primary),
+                                          backgroundColor: colors.primary),
                                       child: Text("YES"),
                                       onPressed: () async {
                                         setState(() {
@@ -384,7 +384,7 @@ var userId;
                                     ),
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                          primary: colors.primary),
+                                          backgroundColor: colors.primary),
                                       child: Text("NO"),
                                       onPressed: () {
                                         Navigator.of(context).pop();
