@@ -52,8 +52,9 @@ const String bankDetail =
 //Api class instance
 
 // for demo panels
-const String baseUrl = 'https://golf.developmentalphawizz.com/api/';
-const String imageUrl = 'https://golf.developmentalphawizz.com/';
+// const String baseUrl = 'https://golf.developmentalphawizz.com/api/';
+const String baseUrl = 'https://bookandplay.co.in/api/';
+const String imageUrl = 'https://bookandplay.co.in/';
 
 //const String ecomExpressUrl = 'https://clbeta.ecomexpress.in/track_me/api/mawbd/';
 //const String jwtKey = 'https://alphawizzserver.com/';

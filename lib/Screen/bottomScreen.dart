@@ -96,6 +96,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
       "image1":'assets/images/LOGOUT.png',
 
     },
+    {
+      'titlee': 'Delete Account',
+      'image': 'assets/images/LOGOUT-1.png',
+      "image1":'assets/images/LOGOUT.png',
+
+    },
   ];
 
   List screenList = const [
@@ -355,8 +361,6 @@ var userId;
                               ));
                         }
                         else if (currentIndexx == 8) {
-
-
                           showDialog(
                               context: context,
                               barrierDismissible: false,
@@ -380,6 +384,35 @@ var userId;
                                             MaterialPageRoute(
                                               builder: (context) => LoginPage(),
                                             ));
+                                      },
+                                    ),
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: colors.primary),
+                                      child: Text("NO"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    )
+                                  ],
+                                );
+                              });
+                        }
+                        else if (currentIndexx == 9) {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Confirm Delete Account"),
+                                  content: Text("Are you sure to Delete Account?"),
+                                  actions: <Widget>[
+                                    ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: colors.primary),
+                                      child: Text("YES"),
+                                      onPressed: () async {
+                                        _deleteAccount();
                                       },
                                     ),
                                     ElevatedButton(
@@ -556,6 +589,34 @@ var userId;
       ),
 
     );
+  }
+
+  String? msg;
+  User usedata = User();
+  Future<void> _deleteAccount() async{
+    // var obj = await SharedPre.getObjs(SharedPre.userData);
+    // usedata = User.fromJson(obj);
+    // var param = {
+    //   'user_id': usedata.id.toString(),
+    // };
+    print("DeleteAccount----------->");
+    // print("DeleteAccount----------->$param");
+    // apiBaseHelper.postAPICall(DeleteAccount, param).then((getData) {
+    //   print("--ffffffffffffff--------->${getData}");
+    //   bool error = getData['status'];
+    //   msg = getData['message'];
+    //   if (error) {
+    //     Fluttertoast.showToast(msg: msg.toString());
+    //     setState(() {
+    //       removesession();
+    //     });
+    //     Navigator.pop(context);
+    //     // SystemNavigator.pop();
+    //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage()));
+    //   } else {
+    //     Fluttertoast.showToast(msg: msg.toString());
+    //   }
+    // });
   }
 
   void _handleNavigationChange(int index) {
